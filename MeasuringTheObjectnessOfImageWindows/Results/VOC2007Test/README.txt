@@ -6,3 +6,11 @@ Each window is given on the format (xmin ymin xmax ymax score).
 The results in this folder is as follows:
 - VOC2007Test.csv is a semicolon separated file containing the id and windows for all images. The first column gives the id of the image, and the second column contains a list of all windows identified for that image.
 - The 'Images' folder contains a separate semicolon separated file for each image. The name of a file is the id of the image, each row is a window identified for that image, and the columns are (xmin ymin xmax ymax score).
+
+Experiment details:
+- OS: Microsoft Windows 10 Home, version 10.0.16299
+- Hardware:
+	- CPU: Intel i7-4720HQ
+	- RAM: 8 GB
+- Programming language: MATLAB
+- Libraries: randomforest-matlab (https://code.google.com/archive/p/randomforest-matlab/)

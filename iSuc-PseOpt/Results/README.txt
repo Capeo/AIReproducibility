@@ -14,5 +14,5 @@ Experiment details:
 - Hardware:
 	- CPU: Intel i7-4720HQ
 	- RAM: 8 GB
-- Programming language: 
-- Libraries:
+- Programming language: MATLAB
+- Libraries: randomforest-matlab (https://code.google.com/archive/p/randomforest-matlab/)
