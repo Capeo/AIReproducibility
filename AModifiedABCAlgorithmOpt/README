@@ -1,0 +1,169 @@
+At the moment, only the first experiment from the paper is implemented,
+largely due to time contraints but also as it was fairly complete, the
+remaining experiments in the paper largely being for further parameter
+tuning, further comparisons to other implementations of parameter
+optimization, or time complexity/scaling experiments.
+This first experiment either way appears to encompass a lot of parameter
+testing, so it is considered sufficient as a starting point.
+
+If more randomness is desired across runs, removing the hardcoded seeds in
+bee.py and main.py should work.
+
+quickstart:
+  Generate a .run-file which contains the primary result of running the bee
+  algorithm with respect to Experiment 1 from the paper with:
+ 
+    python3 main.py
+
+
+  Then pass the .run-file that was generated in dumps/ to t_test.py with:
+
+    python3 t_test.py dumps/sometimestamp.run
+
+  To generate a file in output_json_list/ where each line is a more detailed
+  json-formated result including among other things a t-test.
+  
+DETAILED USAGE:
+* To attempt to reproduce the first experiment of the paper, run:
+
+    python3 main.py
+
+  Alternatively to use a different number of function invocations per
+  parameter configuration (e.g average over 100 runs rather than the
+  30 runs from the paper):
+
+    python3 main.py 100
+
+  A final note, if multiprocessing is causing reproducibility-issues e.g with
+  random seeds (although it should not change anything than order of values),
+  or otherwise then it is possible to change the value USE_MULTIPROCESSING=True
+  inside main.py to USE_MULTIPROCESSING=False, in which case main.py will use a
+  single-core map() instead of a multicore pool.map()
+
+* To perform a t-test and also output a textfile where each line is
+  a json object of the complete final outputs of a main invocation,
+  where the t-test is a comparison of the users own run to the paper 
+  results (and which will also write a final result-file)
+  (this is probably what you mainly want to do after having run main):
+
+    python3 t_test.py dumps/runfile_produced_by_main_invocation.run
+
+  The resulting file will be written to output_json_list/timestamp.json_lines
+  or if the target path already exists, it will be printed to standard output
+
+  Compare two own runs:
+
+    python3 t_test.py dumps/runfile1_produced_by_1st_main_invocation.run dumps/runfile2_produced_by_2nd_main_invocation.ru
+  
+  This second command will not output any json_lines-file like comparing one
+  run to the paper, but otherwise performs the same t-test and so on as with
+  a single run.
+
+
+* To generate a text-based table similar to the one in the paper for
+  experiment 1 (tables 2 and 3 from the paper):
+
+    python3 generate_table.py dumps/1520392261.7347295.run
+
+  Alternatively should a suitable version of the less-application be
+  available, running the below results in a sidescrollable view of the
+  output table, without linebreaks due to too long lines.
+
+    python3 generate_table.py dumps/1520392261.7347295.run | less -S
+
+  No output file is created, if one is desired then the output could be
+  redirected into one via e.g the shell and the resulting file later opened
+  in for instance a graphical text editor or browser
+
+* To run some sanity tests on parts of the implementation, run tests.py
+  It is expected that one function (Schwefel) should give an error, due to
+  the function value at the optimal input stated in the paper being different
+  from the optimal value stated in the paper. 
+
+
+DATA DESCRIPTION:
+  Each line of a .run-file in dumps/ contains three elements: 
+    funcvals, components, params
+  
+  * params is a dict of params used for that paramconfiguration
+  * funcvals is a list of function values, one function value per run. The number
+  of runs is defined in the paramdict (e.g 30 runs)
+  * components is a list of (e.g) 30 lists. Each of the 30 lists contains the
+  components that were optimized in the corresponding function run. 
+  Usually each list of components contains 10 elements (i.e the dimension of the
+  function was 10). One such list of components could be passed to the function
+  named in the paramdict, to get the corresponding value from funcvals.
+  The components are not really used, but are provided for completeness and
+  debugging purposes, meant for e.g readers intending to rerunning + reproducing
+  these exact results.
+  
+
+  Each line in a .json_lines-file is a json-object with the following items,
+  each line using the same parameter-configuration:
+
+    stat_runs: a list of <REPRO_number_of_indepentent_runs> floats, each float
+      is the final function evaluation of one bee-algorithm invocation.
+
+    stat_components: a list of <REPRO_number_of_indepentent_runs> lists. Each
+      sublist has length <DIM> and contains for reference and completeness only
+      the final value of each function parameter being optimized by the bee
+      algorithm
+
+    stat_t: The t-test value of running Welch's t-test on the function
+      mean and std of the reproduction attempts function evaluations vs
+      the mean and std stated in the paper.
+
+    stat_v: Degrees of freedom used in the Welch's t-test
+
+    stat_p: p-value from the Welch's t-test. Higher values (e.g 0.99) could
+      slightly informally be interpreted to mean a higher probability that
+      the mean and std of the reproduction attempt is from the same
+      distribution as the mean and std of the paper.
+
+      A low p-value indicates that the results have not reproduced very well.
+
+    *IMPORTANT*
+    stat_insignificant_error_diff: This is a boolean which bases itself on the
+      statement in the paper that a difference in error values below 10^(-7) is
+      considered insignificant. In this particular context, True means that the
+      absolute difference between the error value of the reproduction attempt
+      and the error value of the paper is less than this threshold, regardless
+      of whether or not the p-value from the t-test indicates a significant 
+      difference.
+
+    PAPER_mean_error: The mean stated in the paper for the current parameter
+      configuration
+
+    PAPER_std_dev: The standard deviation stated in the paper for the current
+      parameter configuration
+
+    PAPER_number_of_independent_runs: How many runs to average over in
+      calculating the above that was used in the paper (e.g 30)
+
+    REPRO_mean_error: The calculated mean of the above <stat_runs> for the
+      current parameter configuration
+
+    REPRO_std_dev: The calculated standard deviation of the above <stat_runs>
+      for the current parameter configuration
+
+    REPRO_number_of_independent_runs: How many runs that were performed in the
+      reproduction attempt (the same as the length of <stat_runs>
+
+
+    *Below follows the actual parameters used in the above*
+    MFE: Maximum function (fitness) evaluations
+
+    MR: Mutation Rate
+
+    SF: Scaling Factor
+
+    SN: Swarm size
+
+    dim: Dimension or number of parameters used for the functions being used.
+      Same as the length of one sublist of <stat_components>
+
+    limit: Abandonement limit for sites in the bee algorithm
+
+    func: Textual name of the function being called. Function implementations
+      are found in functions.py
+
