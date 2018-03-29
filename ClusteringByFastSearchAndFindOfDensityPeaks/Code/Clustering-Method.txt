@@ -1,0 +1,9 @@
+The clustering method from the article was downloaded from http://people.sissa.it/~laio/Research/Clustering_source_code/cluster_dp.tgz
+
+The line 33 was changed to dc = <value per data set>;
+
+The value used depends on the dataset. 
+
+For datasets that uses Gaussian Kernel the lines 44-49 was uncommented and 53-60 was commented out
+
+For datasets that uses "Cut off" Kernel the lines 44-49 was commented out and 53-60 was uncommented.
