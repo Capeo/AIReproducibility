@@ -1,0 +1,21 @@
+The results in mprun1.run are from an invocation of main.py, and were run on
+a machine with the following specifications:
+
+OS: Ubuntu Linux 16.04.4 LTS
+Kernel: Linux 4.13.0-37-generic SMP x86_64
+CPU: Intel(R) Xeon(R) CPU X5650  @ 2.67GHz
+
+
+The results in mprun2.run are from an invocation of main.py, and were run on
+a machine with the following specifications:
+
+OS: Ubuntu Linux 16.04.3 LTS
+Kernel: Linux 4.4.0-109-generic SMP x86_64
+CPU: Intel(R) Core(TM) i7-5930K CPU @ 3.50GHz
+
+
+
+Packages:
+* python-3.5.2
+* numpy-1.14.0
+* scipy-1.0.0

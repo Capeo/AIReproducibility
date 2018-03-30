@@ -1,0 +1,5 @@
+This is an attempt at reproducing the results in the follwing paper:
+
+A modified Artificial Bee Colony algorithm for real-parameter optimization (Akay, Karaboga)
+
+https://doi.org/10.1016/j.ins.2010.07.015
