@@ -1,0 +1,27 @@
+DATA
+Name of data set: Compendium of Protein Lysine Modifications
+Link to data set: http://cplm.biocuckoo.org/browse.php
+Version of data set:
+License of data set:
+Is the data set preprocessed: Yes
+Link to preprocessed data: http://www.jci-bioinfo.cn/iSu/iSuc_data.html
+Version of preprocessed data:
+License of preprocessed data:
+
+EXPERIMENT
+Method source code: AIReproducibility.iSuc-PseOpt
+Link to method source code: https://github.com/Capeo/AIReproducibility/tree/master/iSuc-PseOpt
+Method source code version: 1.0
+Method source code license:
+Experiment source code: AIReproducibility.iSuc-PseOpt
+Link to experiment source code: https://github.com/Capeo/AIReproducibility/tree/master/iSuc-PseOpt
+Experiment source code version: 1.0
+Experiment source code license:
+Hardware description:
+	* CPU vendor and type: Intel i7-4720HQ
+	* Size of primary memory (RAM): 8 GB
+	* Size of secondary memory (Harddisk):  250 GB
+Operating system and version: Windows 10 Home, version 10.0.16299
+Ancillary software and version: randomforest-matlab (0.02)
+Link to ancillary software and version: https://code.google.com/archive/p/randomforest-matlab/
+Link to explicit results: https://github.com/Capeo/AIReproducibility/tree/master/iSuc-PseOpt/Results

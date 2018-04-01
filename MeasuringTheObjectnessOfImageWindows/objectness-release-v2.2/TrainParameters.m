@@ -1,1 +1,0 @@
-learnParameters('C:\Users\oddca\Documents\Masteroppgave\R1\MeasuringTheObjectnessOfImageWindows\Training\');
