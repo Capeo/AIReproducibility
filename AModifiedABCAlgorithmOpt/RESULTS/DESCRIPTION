@@ -1,0 +1,39 @@
+Below, the two (or three) stages/kinds of results from running the program are
+briefly described. See the README in the root directory for a more detailed
+explanation. 
+The results the most useful for determining whether the program reproduced the
+results of the paper are contained in either a file in the second directory,
+output_json_list - mentioned in the second bullet point below, or obtained via
+running "generate_table.py path_to_runfile_in_dumps", an example of the
+resulting output being included in the directory ./miscellaneous_results). 
+
+
+* The directory ./dumps contains a file with function values that were optimized
+for all functions covered in Experiment 1 in the paper
+
+
+* The directory ./output_json_list contains the processed results, which are
+obtained by passing the path to a generated file in ./dumps to the program
+t_test.py. 
+
+This will generate a processed .json_lines-file, and each line in this file
+contains stats about the optimization of a function with respect to a set of
+parameters (e.g it contains among othe things 30 error values if averaging
+over 30 invocations, as well as the mean and std of these, and the mean and
+std that the paper achieved). A more detailed description of the format is
+contained in readme.
+
+Each line will have a p-value, high p-values means the paper and the program
+have very similar results. Additionally, each line has a boolean 
+"stat_insignificant_error_diff", which is true if the difference between the
+mean of the paper and the mean of the program is < 10^(-7).  The paper itself
+treats differences below this value as insignificant, so it may be desirable
+to do the same here, and not rely purely on the P-values. 
+
+
+* The directory ./miscellaneous_results contains an example output resulting
+from passing a .run-file in RESULTS/dumps/ to the program generate_table.py
+This is a slightly "cleaner" version of the json_list-files, and tries to
+mimic the way results are presented in tables in the paper, although it does
+not use a t-test as the program t_test.py does. The file was created by simply
+redirecting thestdout from generate_tables.py

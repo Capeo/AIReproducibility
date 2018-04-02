@@ -76,7 +76,7 @@ def write_file_jsonlines(L):
   s = '\n'.join(L)
   filename = str(time.time()).split('.')[0] + '.json_lines'
 
-  path = os.path.join('output_json_list', filename)
+  path = os.path.join('RESULTS', 'output_json_list', filename)
   if os.path.exists(path):
     print("Filepath '{}' already exists, not overwriting; printing instead:".format(path))
     print(s)
