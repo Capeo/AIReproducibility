@@ -1,0 +1,8 @@
+Concerning the concrete files contained in these directories, they are the
+result of running main.py two times, once each on two different machines. 
+
+The reason that two invocations are included is that the program by default
+uses multiple cores, so the order of values from each invocation might vary,
+but the means should still be identical, as indicated by running a diff on
+the two tables (which only contain means, not values used to calculate the 
+mean) in the directory miscellaneous_results.
