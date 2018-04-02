@@ -72,7 +72,8 @@ def experiment1(pool, REPRO_number_of_runs=None):
     """
     function_runs = parse_tables.experiment_1_tables_2_3()
     timestamp = time.time()
-    run_file = "dumps/{}.run".format(timestamp)
+    uniq_filename = "{}.run".format(timestamp)
+    run_file = os.path.join("RESULTS", "dumps", uniq_filename)
     print("Dumping output to {}\n".format(run_file))
     counter = 0
     for i,function_run in enumerate(function_runs, start=1):

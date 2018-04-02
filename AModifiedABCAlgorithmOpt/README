@@ -1,3 +1,5 @@
+See also a short description of each type of result in the directory RESULTS/
+
 At the moment, only the first experiment from the paper is implemented,
 largely due to time contraints but also as it was fairly complete, the
 remaining experiments in the paper largely being for further parameter
@@ -16,13 +18,19 @@ quickstart:
     python3 main.py
 
 
-  Then pass the .run-file that was generated in dumps/ to t_test.py with:
+  Then pass the .run-file that was generated in RESULTS/dumps/ to the script
+  t_test.py:
 
-    python3 t_test.py dumps/sometimestamp.run
+    python3 t_test.py RESULTS/dumps/sometimestamp.run
 
-  To generate a file in output_json_list/ where each line is a more detailed
-  json-formated result including among other things a t-test.
-  
+  To generate a file in RESULTS/output_json_list/ where each line is a more
+  detailed json-formated result including among other things a t-test.
+
+  Then check the p-value of each line in this generated file, where higher
+  p-values means that the mean in the paper and the mean of the program are
+  more similar.
+
+
 DETAILED USAGE:
 * To attempt to reproduce the first experiment of the paper, run:
 
@@ -46,14 +54,14 @@ DETAILED USAGE:
   results (and which will also write a final result-file)
   (this is probably what you mainly want to do after having run main):
 
-    python3 t_test.py dumps/runfile_produced_by_main_invocation.run
+    python3 t_test.py RESULTS/dumps/runfile_produced_by_main_invocation.run
 
-  The resulting file will be written to output_json_list/timestamp.json_lines
+  The resulting file will be written to RESULTS/output_json_list/timestamp.json_lines
   or if the target path already exists, it will be printed to standard output
 
   Compare two own runs:
 
-    python3 t_test.py dumps/runfile1_produced_by_1st_main_invocation.run dumps/runfile2_produced_by_2nd_main_invocation.ru
+    python3 t_test.py RESULTS/dumps/runfile1_produced_by_1st_main_invocation.run RESULTS/dumps/runfile2_produced_by_2nd_main_invocation.ru
   
   This second command will not output any json_lines-file like comparing one
   run to the paper, but otherwise performs the same t-test and so on as with
@@ -63,13 +71,13 @@ DETAILED USAGE:
 * To generate a text-based table similar to the one in the paper for
   experiment 1 (tables 2 and 3 from the paper):
 
-    python3 generate_table.py dumps/1520392261.7347295.run
+    python3 generate_table.py RESULTS/dumps/1520392261.7347295.run
 
   Alternatively should a suitable version of the less-application be
   available, running the below results in a sidescrollable view of the
   output table, without linebreaks due to too long lines.
 
-    python3 generate_table.py dumps/1520392261.7347295.run | less -S
+    python3 generate_table.py RESULTS/dumps/1520392261.7347295.run | less -S
 
   No output file is created, if one is desired then the output could be
   redirected into one via e.g the shell and the resulting file later opened
@@ -82,7 +90,7 @@ DETAILED USAGE:
 
 
 DATA DESCRIPTION:
-  Each line of a .run-file in dumps/ contains three elements: 
+  Each line of a .run-file in RESULTS/dumps/ contains three elements: 
     funcvals, components, params
   
   * params is a dict of params used for that paramconfiguration

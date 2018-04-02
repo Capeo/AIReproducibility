@@ -8,6 +8,10 @@ import math
 # attempt to detect usage of scipy-functions where the behaviour
 # does not seem to match the formula in the paper
 
+# Schwefel is in the current version expected to fail, with some offset from 0
+# although I cannot say for sure why it is that Schwefel fails
+#   (with respect to the expected values stated in the actual paper being reproduced)
+
 def test_rosen_integers():
     X = [2,4,6,8]
     y = 100*((4 - 2**2)**2) + (2 - 1)**2 \

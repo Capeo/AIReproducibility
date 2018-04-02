@@ -2,6 +2,10 @@
 import functions
 import re
 
+# this file has the results from the first experiment of the actual paper hardcoded as
+# strings, and parses it into a list of parameters + expected results that other modules
+# (largely main.py, the experiment code) then in turn pass to e.g bee.py (the implemented method)
+
 class Parameters(object):
     def __init__(self, dataline, MR, SF, limit, SN, dim, MFE, PAPER_number_of_independent_runs, func):
         self.MR = MR
@@ -123,4 +127,3 @@ def experiment_1_tables_2_3():
   experiments.append(  _format_data_1(lines=mm_8_schwefel, func=functions.Schwefel)  )
 
   return experiments
-experiment_1_tables_2_3()
