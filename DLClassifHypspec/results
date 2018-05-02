@@ -1,0 +1,191 @@
+===Table 1===
+From running ksc_SdA.py:
+"""
+                          Number of Samples
+Class No.       TRAIN   VALID   TEST    RightCount   RightRate
+0               458     148     145     137     0.944828
+1               140     52      51      43      0.843137
+2               141     62      53      41      0.773585
+3               159     51      42      7       0.166667
+4               95      30      36      18      0.500000
+5               147     46      36      1       0.027778
+6               56      25      24      0       0.000000
+7               275     93      108     59      0.546296
+8               283     128     109     109     1.000000
+9               243     87      74      71      0.959459
+10              249     74      96      93      0.968750
+11              298     123     123     94      0.764228
+12              556     181     203     203     1.000000
+Overall         3100    1100    1100    876     0.796364
+"""
+There is a minor mismatch between what the program prints and what is stated
+in the paper, with respect to the number of samples in each class and also
+with respect to the number of samples used for validation and testing.
+For instance, for class 0, the paper states the counts:
+  (TRAIN, 457), (VALID, 152), (TEST, 152),
+which is slightly off from the values in the first line above.
+
+
+===Table 2===
+From running pavia_SdA.py:
+"""
+                          Number of Samples
+Class No.       TRAIN   VALID   TEST    RightCount   RightRate
+0               3944    1382    1267    1225    0.966851
+1               10498   3541    3498    3424    0.978845
+2               1181    410     426     366     0.859155
+3               1827    658     635     605     0.952756
+4               849     241     255     253     0.992157
+5               3005    1001    1023    958     0.936461
+6               815     244     271     253     0.933579
+7               2207    741     734     661     0.900545
+8               574     182     191     190     0.994764
+Overall         24900   8400    8300    7935    0.956024
+"""
+Similar mismatch, except the deviations are even larger than for the ksc-set.
+
+
+===Table 4===
+Replicating impact of depth does not appear to be a part of the supplied code
+
+
+===Table 5===
+The result from the code does not match the result from the paper.
+Running the code with the 300 epochs from the repository (rather than the 3300
+as stated in the paper) does not improve the performance)
+
+This sounds similar to an issue reported at the repository of the source code
+https://github.com/hantek/deeplearn_hsi/issues/2, which did not seem to end up
+having any sort of resolution.
+
+
+Running pavia_SdA.py:
+"""
+                          Number of Samples
+Class No.       TRAIN   VALID   TEST    RightCount   RightRate
+0               3944    1382    1267    1225    0.966851
+1               10498   3541    3498    3424    0.978845
+2               1181    410     426     366     0.859155
+3               1827    658     635     605     0.952756
+4               849     241     255     253     0.992157
+5               3005    1001    1023    958     0.936461
+6               815     244     271     253     0.933579
+7               2207    741     734     661     0.900545
+8               574     182     191     190     0.994764
+Overall         24900   8400    8300    7935    0.956024
+kappa index of agreement: 0.942444
+"""
+The paper has these values as the result (for SAE-LR):
+  (OA, 0.9514), (AA, 0.9401), (Kappa, 0.9370)
+These values are more similar than for ksc_SdA.py, and the Kappa-coefficient
+is within the 25th and 75th percentile of the whisker plot in Fig. 12 of the
+paper.
+
+
+===Table 6===
+Spatial-Dominated and Joint Classification 
+OA = Overall Accuracy
+AA = Average Accuracy
+Kappa = Kappa coefficient
+
+Running ksc_spatial_SdA.py:
+"""
+                          Number of Samples
+Class No.       TRAIN   VALID   TEST    RightCount   RightRate
+0               458     148     145     0       0.000000
+1               140     52      51      0       0.000000
+2               141     62      53      0       0.000000
+3               159     51      42      3       0.071429
+4               95      30      36      1       0.027778
+5               147     46      36      0       0.000000
+6               56      25      24      0       0.000000
+7               275     93      108     50      0.462963
+8               283     128     109     0       0.000000
+9               243     87      74      25      0.337838
+10              249     74      96      0       0.000000
+11              298     123     123     11      0.089431
+12              556     181     203     182     0.896552
+Overall         3100    1100    1100    272     0.247273
+kappa index of agreement: 0.133999
+"""
+The paper has these values as the result (for SAE-LR):
+  (OA, 0.9776), (AA, 0.9625), (Kappa, 0.9750)
+Large mismatch.
+
+
+Running pavia_spatial_SdA.py:
+"""
+                          Number of Samples
+Class No.       TRAIN   VALID   TEST    RightCount   RightRate
+0               3944    1382    1267    1254    0.989740
+1               10498   3541    3498    3483    0.995712
+2               1181    410     426     404     0.948357
+3               1827    658     635     626     0.985827
+4               849     241     255     255     1.000000
+5               3005    1001    1023    993     0.970674
+6               815     244     271     260     0.959410
+7               2207    741     734     718     0.978202
+8               574     182     191     191     1.000000
+Overall         24900   8400    8300    8184    0.986024
+kappa index of agreement: 0.981713
+
+"""
+The paper has these values as the result (for SAE-LR):
+  (OA, 0.9812), (AA, 0.9732), (Kappa, 0.9755)
+The kappa coefficient is slightly outside the upper percentile in the box plot
+in fig.15 of the paper. 
+
+
+Running ksc_joint_SdA.py:
+"""
+                          Number of Samples
+Class No.       TRAIN   VALID   TEST    RightCount   RightRate
+0               458     148     145     138     0.951724
+1               140     52      51      13      0.254902
+2               141     62      53      0       0.000000
+3               159     51      42      10      0.238095
+4               95      30      36      7       0.194444
+5               147     46      36      1       0.027778
+6               56      25      24      0       0.000000
+7               275     93      90      65      0.722222
+8               283     128     109     91      0.834862
+9               243     87      74      42      0.567568
+10              249     74      96      95      0.989583
+11              298     123     104     70      0.673077
+12              556     181     190     187     0.984211
+Overall         3100    1100    1050    719     0.684762
+kappa index of agreement: 0.641742
+"""
+The paper has these values as the result (for SAE-LR):
+  (OA, 0.9876), (AA, 0.9790), (Kappa, 0.9862)
+Mismatch.
+
+
+Running pavia_joint_SdA.py:
+"""
+                          Number of Samples
+Class No.       TRAIN   VALID   TEST    RightCount   RightRate
+0               3944    1342    1240    1227    0.989516
+1               10498   3541    3498    3490    0.997713
+2               1181    410     426     413     0.969484
+3               1827    648     612     607     0.991830
+4               849     241     255     255     1.000000
+5               3005    1001    1023    1012    0.989247
+6               815     244     271     265     0.977860
+7               2207    741     734     716     0.975477
+8               574     182     191     191     1.000000
+Overall         24900   8350    8250    8176    0.991030
+kappa index of agreement: 0.988251
+"""
+The paper has these values as the result (for SAE-LR):
+  (OA, 0.9852), (AA, 0.9782), (Kappa, 0.9807)
+The kappa coefficient is slightly outside the upper percentile in the box plot
+in fig.15 of the paper. 
+
+
+
+Overall, the methods on the ksc-dataset (ksc_SdA, ksc_spatial_SdA,
+ksc_joint_SdA) do not give the expected results at all. The methods used on
+the pavia-dataset (pavia_SdA, pavia_spatial_SdA, pavia_joint_SdA) give close
+to the expected result.
+

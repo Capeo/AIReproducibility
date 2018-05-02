@@ -1,0 +1,50 @@
+epoch 99980, minibatch 31/31, validation error 38.818182 %
+epoch 99990, minibatch 31/31, validation error 39.000000 %
+epoch 100000, minibatch 31/31, validation error 38.909091 %
+Optimization complete with best validation score of 35.454545 %,with test performance 31.500000 %
+The training code for file ksc_joint_SdA.py ran for 14.40m
+... classifying test set with learnt model:
+Detailed information in each category:
+                          Number of Samples
+Class No.       TRAIN   VALID   TEST    RightCount   RightRate
+0               458     148     145     138     0.951724
+1               140     52      51      13      0.254902
+2               141     62      53      0       0.000000
+3               159     51      42      10      0.238095
+4               95      30      36      7       0.194444
+5               147     46      36      1       0.027778
+6               56      25      24      0       0.000000
+7               275     93      90      65      0.722222
+8               283     128     109     91      0.834862
+9               243     87      74      42      0.567568
+10              249     74      96      95      0.989583
+11              298     123     104     70      0.673077
+12              556     181     190     187     0.984211
+Overall         3100    1100    1050    719     0.684762
+kappa index of agreement: 0.641742
+confusion matrix:
+[[138   0   0   0   0   0   0   0   7   0   0   0   0]
+ [ 15  13   0   4   1   0   0   0  12   6   0   0   0]
+ [ 49   0   0   1   0   1   0   0   2   0   0   0   0]
+ [ 30   0   0  10   0   0   0   0   0   1   0   1   0]
+ [ 21   1   3   3   7   0   0   0   1   0   0   0   0]
+ [ 31   0   0   0   0   1   0   0   4   0   0   0   0]
+ [ 22   1   0   1   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0  65  16   3   0   2   4]
+ [  0   0   0   0   0   0   0  18  91   0   0   0   0]
+ [  0   1   0   0   0   0   0   3  18  42   1   9   0]
+ [  0   0   0   0   0   0   0   0   1   0  95   0   0]
+ [  0   0   0   0   0   0   0  13   1  13   2  70   5]
+ [  0   0   0   0   0   0   0   0   0   0   0   3 187]]
+... classifying the whole image with learnt model:
+...... extracting data
+...... begin 
+...... done 
+finished, running time:0.081880s
+Saving classification results
+... performing Student's t-test
+Total number of tests: 100
+        std             mean
+k_sae   0.009932        0.598802
+k_svm   0.007507        0.849184
+left = -1607.337721, right = 1.652586, test FAILED.

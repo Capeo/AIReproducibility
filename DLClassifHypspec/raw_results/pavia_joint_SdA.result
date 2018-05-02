@@ -1,0 +1,48 @@
+epoch 79930, minibatch 498/498, validation error 0.970060 %
+epoch 79940, minibatch 498/498, validation error 0.970060 %
+epoch 79950, minibatch 498/498, validation error 0.970060 %
+epoch 79960, minibatch 498/498, validation error 0.970060 %
+epoch 79970, minibatch 498/498, validation error 0.970060 %
+epoch 79980, minibatch 498/498, validation error 0.970060 %
+epoch 79990, minibatch 498/498, validation error 0.970060 %
+epoch 80000, minibatch 498/498, validation error 0.970060 %
+Optimization complete with best validation score of 0.970060 %,with test performance 0.896970 %
+The training code for file pavia_joint_SdA.py ran for 286.75m
+... saving parameters
+... classifying test set with learnt model:
+Detailed information in each category:
+                          Number of Samples
+Class No.       TRAIN   VALID   TEST    RightCount   RightRate
+0               3944    1342    1240    1227    0.989516
+1               10498   3541    3498    3490    0.997713
+2               1181    410     426     413     0.969484
+3               1827    648     612     607     0.991830
+4               849     241     255     255     1.000000
+5               3005    1001    1023    1012    0.989247
+6               815     244     271     265     0.977860
+7               2207    741     734     716     0.975477
+8               574     182     191     191     1.000000
+Overall         24900   8350    8250    8176    0.991030
+kappa index of agreement: 0.988251
+confusion matrix:
+[[1227    0    2    0    0    0    9    2    0]
+ [   0 3490    0    2    0    6    0    0    0]
+ [   2    0  413    0    0    0    0   11    0]
+ [   0    2    0  607    0    2    0    1    0]
+ [   0    0    0    0  255    0    0    0    0]
+ [   0   11    0    0    0 1012    0    0    0]
+ [   6    0    0    0    0    0  265    0    0]
+ [   4    0   14    0    0    0    0  716    0]
+ [   0    0    0    0    0    0    0    0  191]]
+... classifying the whole image with learnt model:
+...... extracting data
+...... begin 
+...... done 
+finished, running time:0.060807s
+Saving classification results
+... performing Student's t-test
+Total number of tests: 100
+        std             mean
+k_sae   0.000894        0.987743
+k_svm   0.001253        0.981531
+left = 2606.917121, right = 1.652586, test PASSED.
