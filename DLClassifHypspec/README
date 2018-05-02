@@ -1,0 +1,23 @@
+These are the applied modifications and results from trying to replicate the
+results in the cited paper (Deep Learning-Based Classification of Hyperspectral Data),
+using the source code published by one of the authors of that paper.
+
+Repository: https://github.com/hantek/deeplearn_hsi
+Commit: c9d38b11a0e208283976078ef20df0c39ffd7f94
+Modifications applied here:
+  * Training epochs correspond with paper (changed in repo commit)
+    (only mentioned in the paper for one method, ksc_SdA, 3300 mentioned while
+     paper sets it to 300. Pavia is set to a different number of epochs,
+     without the paper mentioning this).
+  * Configure Theano to use GPU
+  * Fix paths
+  * Fix an import
+  * Stop matplotlib plot from being shown due to being run from tty
+  * Fix numpy bug https://github.com/numpy/numpy/commit/6b1a1205eac6fe5d162f16155d500765e8bca53c
+
+
+The tail of the program output as well as the files generated are included in
+the raw_results directory. Additionally, ksc_SdA.py was run with
+pretraining_epochs set to both 3300 and 300, the former because that is the
+value in the paper and the latter because a commit to the repository changed
+it to 300. The results from both runs are included in the directory.
