@@ -180,12 +180,12 @@ def generate_folds_SS(dataset, size, L, U, V, T):
 
         #ascertain that all labels are used and that no label is used twice
         S1,S2,S3,S4 = [set(S_) for S_ in [_labeled, _unlabeled, _validation, _test]]
+        assert len(set.union(S1,S2,S3,S4)) == size
         for m,Sx in enumerate([S1,S2,S3,S4]):
           for n,Sy in enumerate([S1,S2,S3,S4]):
             if m == n:
               continue
-            assert not set.intersection(S1,S2)
-            assert len(set.union(S1,S2,S3,S4)) == size
+            assert not set.intersection(Sx,Sy)
         # json does not like np.int64
         partition = {'L':[int(x) for x in _labeled],
                      'U':[int(x) for x in _unlabeled],
