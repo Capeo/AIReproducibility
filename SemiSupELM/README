@@ -1,4 +1,7 @@
-This repository attempts to reproduce the results presented in:
+This repository attempts to reproduce the results presented in: 
+ "Semi-Supervised and Unsupervised Extreme Learning Machines"
+  (See CITATION file for detailed citation)
+
 Due to time constraints, only the semisupervised part has been implemented.
 
 Usage:
@@ -62,3 +65,21 @@ Description of entries:
   pages={2405-2417}
 }
 
+
+Some parameters are from Table 9 in Melacci (cited as [57] by the above paper):  
+
+article{Melacci:2011:LSV:1953048.2021038,
+ author = {Melacci, Stefano and Belkin, Mikhail},
+ title = {Laplacian Support Vector Machines Trained in the Primal},
+ journal = {J. Mach. Learn. Res.},
+ issue_date = {2/1/2011},
+ volume = {12},
+ month = jul,
+ year = {2011},
+ issn = {1532-4435},
+ pages = {1149--1184},
+ numpages = {36},
+ url = {http://dl.acm.org/citation.cfm?id=1953048.2021038},
+ acmid = {2021038},
+ publisher = {JMLR.org},
+} 
