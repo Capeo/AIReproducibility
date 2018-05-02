@@ -1,0 +1,90 @@
+This repository attempts to reproduce the results presented in: 
+ "Semi-Supervised and Unsupervised Extreme Learning Machines"
+  (See CITATION file for detailed citation)
+
+Please be advised before using this implementation as a reference that the 
+error rates from running the implementation are very poor, and does not 
+reach the values achieved in the cited paper. This indicates that there very
+likely are errors in the implementation due do misinterpretations or ambiguities.
+
+Due to time constraints, only the semisupervised part has been implemented.
+
+Usage:
+
+example invocations:
+
+python3 main.py coil20b idx_datasets/pregen/coil20b.json
+
+or
+
+python3 main_runall.py
+
+* To run a particular experiment using a particular partition of the dataset into folds
+  (labeled, unlabeled, validation, test), using k-fold crossvalidation:
+
+  python3 main.py experiment_name path_to_json_folds
+
+  Where experiment_name is one of :
+    coil20, coil20b, g50c, uspst, uspstb
+
+  And where path_to_json_fold is a path to a json file generated for a
+  particular dataset, by e.g main_gendata.py
+
+  (pregenerated ones used to produce the results in the results/ directory
+   are provided in the directory idx_datasets/pregen/)
+
+* To generate the json file with the folds to pass to e.g main.py:
+
+  python3 main_gendata.py
+
+  Remember to change the paths to the .mat datasets in main_gendata.py to
+  the appropriate location where they are stored.
+
+* To run all (semisupervised) experiments:
+
+  python3 main_runall.py
+
+The results will be stored in the results directory, with a timestamp on each file for when its
+experiment was run so to not overwrite previous results.
+
+Each model (experiment) in the results directory has two output files:
+*A .summary file, which lists very summaric results from running the model
+  on the test sets of that file
+
+*A .csv file, where each row has the entries: index_in_dataset,predicted_label,target_label,fold_number
+
+Description of entries:
+
+* index_in_dataset is the row of the dataset that was classified
+* predicted_label is the label the model predicted
+* actual_label is the true label
+* fold_number is which fold from k-cross validation the line corresponds to;
+  this value can largely be ignored
+
+@article{Huang2014SemiSupervisedAU,
+  title={Semi-Supervised and Unsupervised Extreme Learning Machines},
+  author={Gao Huang and Shiji Song and Jatinder N. D. Gupta and Cheng Wu},
+  journal={IEEE Transactions on Cybernetics},
+  year={2014},
+  volume={44},
+  pages={2405-2417}
+}
+
+
+Some parameters are from Table 9 in Melacci (cited as [57] by the above paper):  
+
+article{Melacci:2011:LSV:1953048.2021038,
+ author = {Melacci, Stefano and Belkin, Mikhail},
+ title = {Laplacian Support Vector Machines Trained in the Primal},
+ journal = {J. Mach. Learn. Res.},
+ issue_date = {2/1/2011},
+ volume = {12},
+ month = jul,
+ year = {2011},
+ issn = {1532-4435},
+ pages = {1149--1184},
+ numpages = {36},
+ url = {http://dl.acm.org/citation.cfm?id=1953048.2021038},
+ acmid = {2021038},
+ publisher = {JMLR.org},
+} 

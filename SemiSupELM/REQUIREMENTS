@@ -1,0 +1,12 @@
+The results in results/ are from an invocation of main_runall.py, and were run
+on a machine with the following specifications:
+
+OS: Ubuntu Linux 16.04.3 LTS
+Kernel: Linux 4.4.0-109-generic SMP x86_64
+CPU: Intel(R) Core(TM) i7-5930K CPU @ 3.50GHz
+
+Packages:
+* scipy-1.0.0
+* scikit-learn-0.19.1
+* numpy-1.14.0
+* python-3.5.2
