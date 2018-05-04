@@ -32,15 +32,17 @@ def gen_inlayer(ni, nh):
     W = W.astype(np.float64)
     return W
 
-def get_label_proportions(labeled):
-    """Number of samples per class label"""
+def get_label_proportions(labeled, label_to_index_map):
+    """return a mapping index:number_of_occurences,
+       where index is the index corresponding to a class label
+    """
     proportions = {}
-    for pattern,label in zip(*labeled):
+    for label in labeled:
         assert label.size == 1
-        label = label[0]
-        if label not in proportions:
-            proportions[label] = 0
-        proportions[label] += 1
+        key = label_to_index_map[label[0]]
+        if key not in proportions:
+            proportions[key] = 0
+        proportions[key] += 1
     return proportions
 
 def adjacency(features, n_neighbors, param_sigma):
@@ -112,8 +114,7 @@ def gen_beta(H, L, C0, lam, Y, nh, label_proportions):
     nlab = sum((label_proportions.get(key) for key in label_proportions))
     C = np.zeros_like(L)
     for key in label_proportions:
-        # labels start at 1
-        C[key-1, key-1] = float(C0)/label_proportions[key]
+        C[key, key] = float(C0)/label_proportions[key]
 
     HT = np.transpose(H)
     # More labeled examples than hidden neurons
@@ -140,20 +141,61 @@ def eval_h(X, hlayer_w):
 def evaluate_model(X, hlayer_w, beta):
     H = eval_h(X, hlayer_w)
     result = mmatmul(H, beta)
-    # Use closest integer as the predicted class
-    #  Perhaps this is not a fair assumption ? [TODO]
-    return np.rint(result).astype(np.int64)
+    return result
 
-def calculate_accuracy(predicted, target):
-    correct = np.count_nonzero(predicted == target)
-    #print("{:8.4f}, {:}/{:}".format( float(correct)/target.size, correct, target.size))
+def __IDX2LAB(idx, map):
+    return map[idx]
+IDX2LAB = np.vectorize(__IDX2LAB, excluded=['map'])
 
-    return float(correct)/target.size
+def get_right_wrong_count(predicted, target, index_to_label_map):
+    """returns the number of correct and incorrect classifications as
+        a tuple (num_correct, num_incorrect)
+    """
+    predicted_values = np.argmax(predicted, axis=1)
+    assert predicted_values.shape == target.shape
 
-def get_right_wrong_count(predicted, target):
-    correct = np.count_nonzero(predicted == target)
-    wrong = np.count_nonzero(predicted != target)
-    return correct,wrong
+    predicted_labels = IDX2LAB(predicted_values, index_to_label_map)
+    assert predicted_labels.shape == target.shape
+
+    correct   = np.count_nonzero(predicted_labels == target)
+    incorrect = np.count_nonzero(predicted_labels != target)
+    assert correct + incorrect == target.size
+
+    return correct,incorrect
+
+def create_onehot(labels):
+    """Given an (n,1) matrix of labels, create an (n,k) one-hot matrix
+       with ones at the indices of the label and zeros everywhere else
+
+       The labels might not neatly correspond to indices, so return a
+       dictionary mapping {index:label} and {label:index} as well.
+    """
+    unique_labels = set(x[0] for x in labels)
+    ordered_labels = sorted(list(unique_labels))
+
+    # map each unique label to an index from 0 to num_uniq
+    label_to_index_map = {lab:i for i,lab in enumerate(ordered_labels)}
+
+    mold = np.repeat(np.zeros_like(labels), len(label_to_index_map), axis=1)
+
+    # for each row in the heatmap, find out which index to set to 1 by
+    # looking up which index corresponds to the correct label for that row
+    indices = [label_to_index_map[lab[0]] for lab in labels]
+    # then set the correct index of each such row to 1
+    mold[np.arange(mold.shape[0]), indices] = 1
+
+    # create the reverse mapping so that the index with the highest predicted
+    # value can be looked up to get the predicted label
+    index_to_label_map = {label_to_index_map[lab]:lab for lab in label_to_index_map}
+
+    # check that the labels passed in have been represented in the mold (one-hot map)
+    for label,row in zip(labels, mold):
+        # each row has exactly one correct target value
+        assert np.count_nonzero(row) == 1
+        # the label when mapped to an index gives the index of the 1
+        assert np.argmax(row) == label_to_index_map[label[0]]
+
+    return mold, index_to_label_map, label_to_index_map
 
 def run_SS(labeled, unlabeled, validation, test, nh, NN, sigma):
     """Train and run the model given sets partitioned into:
@@ -164,14 +206,21 @@ def run_SS(labeled, unlabeled, validation, test, nh, NN, sigma):
         numbe of nearest neighbours for the weight matrix,
         and an (unused) sigma value claimed to be a hyperparameter
     """
-    # number of labeled training samples for each label, used for weighting
-    label_proportions = get_label_proportions(labeled)
-
     training = np.vstack((labeled[0], unlabeled[0]))
-    # set the labeled portion of target to the label values, and the remainder
-    # (i.e the unlabeled portion) to 0 (using the shape of the unlabeled sets
-    #  unused labels as a mold).                     v only used to get the right shape
-    target = np.vstack(  (labeled[1], np.zeros_like(unlabeled[1]))  )
+
+    # create a one-hot matrix using target labels
+    labeled_onehot, index_to_label_map, label_to_index_map = create_onehot(labeled[1])
+    # the target one-hot matrix includes zeros in place of any unlabeled samples
+    unlabeled_onehot = np.zeros(shape=(unlabeled[1].size, len(index_to_label_map)))
+
+    target_one_hot = np.vstack((labeled_onehot, unlabeled_onehot))
+    #print(target_one_hot[:10])
+    #print(target_one_hot.shape)
+
+    # number of labeled training samples for each label, used for weighting
+    label_proportions = get_label_proportions(labeled[1], label_to_index_map)
+    print("Label proportions:", label_proportions)
+
 
     # randomly generated hidden layer weights + biases
     ni = training.shape[1] # each X is a training pattern of length ni
@@ -189,9 +238,17 @@ def run_SS(labeled, unlabeled, validation, test, nh, NN, sigma):
         C0 = 10.0**i
         for j in range(-6, 6+1):
             lam = 10.0**j
-            beta = gen_beta(H, LAP, C0, lam, target, nh, label_proportions)
+            beta = gen_beta(H=H,
+                            L=LAP,
+                            C0=C0,
+                            lam=lam,
+                            Y=target_one_hot,
+                            nh=nh,
+                            label_proportions=label_proportions)
+
             result = evaluate_model(validation[0], hlayer_w, beta)
-            acc = calculate_accuracy(result, validation[1])
+            correct,wrong = get_right_wrong_count(result, validation[1], index_to_label_map)
+            acc = float(correct)/(correct + wrong)
             if acc > best_accuracy:
                 best_C0 = C0
                 best_lam = lam
@@ -200,10 +257,17 @@ def run_SS(labeled, unlabeled, validation, test, nh, NN, sigma):
     print("Selected C0: {}\nSelectec lam: {}".format(best_C0, best_lam))
     # evaluate performance on test set, using the best-performing values of
     # the parameters C0 and lambda (on the validation set), found above.
-    beta = gen_beta(H, LAP, best_C0, best_lam, target, nh, label_proportions)
+    beta = gen_beta(H=H,
+                    L=LAP,
+                    C0=best_C0,
+                    lam=best_lam,
+                    Y=target_one_hot,
+                    nh=nh,
+                    label_proportions=label_proportions)
+
     result = evaluate_model(test[0], hlayer_w, beta)
-    acc = calculate_accuracy(result, test[1])
-    correct,wrong = get_right_wrong_count(result, test[1])
+    correct,wrong = get_right_wrong_count(result, test[1], index_to_label_map)
+    acc = float(correct)/(correct + wrong)
     print("Percentage of correct testset classifications: {}\n".format(acc))
     # predicted, target, number_correct, number_wrong
     return result, test[1], correct, wrong
