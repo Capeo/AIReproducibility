@@ -10,6 +10,9 @@ def load_dataset(path, add_biases=True, binarize=False):
     """Load a dataset used in the experiment, adding biases to
        the features for mathematical convenience, and binarizing
        the set by grouing the first N//2 class labels together if appropriate.
+
+       Only pass binarize=True if the class labels in the dataset are
+       appropriate (e.g 1-20). [TODO]
     """
     dataset = sio.loadmat(path)
 
@@ -19,6 +22,8 @@ def load_dataset(path, add_biases=True, binarize=False):
         new_X = np.insert(dataset['X'], obj=0, values=1, axis=1)
         dataset['X'] = new_X
 
+    # does not work in general, but works for the datasets uspstb and coil50b
+    # where labels go from 0 to 9 and 1 to 20 respectively
     if binarize:
         classes = []
         for y in dataset['y']:
@@ -27,6 +32,8 @@ def load_dataset(path, add_biases=True, binarize=False):
         num_classes = len(classes)
 
         # all labels up to and including this belong to the first class
+        # (the rest of the labels belong to the second class)
+        # (class 1 is x <= 4 for uspstb  and  x <= 10 coil50b)
         first_class = max(num_classes//2,  1)
 
         new_y = np.where(dataset['y'] <= first_class, 1, 2)
@@ -84,7 +91,7 @@ def dict_to_numpy(fold_dict, main_data):
 
 def dump_json(obj, path):
     with open(path, 'w') as f:
-        json.dump(obj, f)
+        json.dump(obj, f, sort_keys=True)
 
 def load_json(path):
     with open(path) as f:
@@ -92,6 +99,7 @@ def load_json(path):
     return obj
 
 def _create_folds(array, k, size):
+    """split array into k chunks of approx size=size"""
     folds = []
     current = 0
     for i in range(k-1):
@@ -126,10 +134,6 @@ def generate_folds_SS(dataset, size, L, U, V, T):
     assert dataset['y'].shape[0] == size
     assert dataset['y'].shape[1] == 1
     assert L + U + V + T == size
-    # labels have to start at 1
-    #assert 0 not in {k[0] for k in dataset['y']}
-    if 0 in {k[0] for k in dataset['y']}:
-        dataset['y'] += 1
 
     PARTITIONS = []
 
@@ -211,4 +215,3 @@ def gen_partitions(mat_path, size, L, U, V, T, repetitions=3):
         P = generate_folds_SS(data, size=size, L=L, U=U, V=V, T=T)
         PARTITIONS.extend(P)
     return PARTITIONS
-  
