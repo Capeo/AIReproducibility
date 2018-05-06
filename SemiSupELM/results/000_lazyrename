@@ -1,0 +1,2 @@
+# simply move numbered files (e.g coil20_1515151515.csv) to a nonnumbered name (coil20.csv) 
+# for i in *_*.{csv,summary}; do mv $i $(echo $i | sed -E "s/_[0-9]+//g"); done

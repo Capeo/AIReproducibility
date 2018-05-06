@@ -90,8 +90,12 @@ def main_SS(experiment_name, experiment_function, json_path, dataset_path, add_b
     print(s)
 
 if __name__ == '__main__':
-    experiment = sys.argv[1]
-    partition_path = sys.argv[2]
+    if len(sys.argv) < 3:
+        experiment = "print_usage_info"
+    else:
+        experiment = sys.argv[1]
+        partition_path = sys.argv[2]
+
 
     if experiment == "coil20":
         main_SS(experiment, coil20, partition_path, mat_path_coil20, True, False, offset=0)
@@ -104,8 +108,7 @@ if __name__ == '__main__':
     elif experiment == "uspstb":
         main_SS(experiment, uspstb, partition_path, mat_path_uspst, True, True, offset=4)
     else:
-        print("Usage: ")
-
-
-
-
+        print("Usage example: \n" +
+              "  python3 main.py coil20 idx_datasets/pregen/coil20.json\n" +
+              "or\n" +
+              "  python3 main_runall.py")
