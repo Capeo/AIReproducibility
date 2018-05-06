@@ -3,7 +3,7 @@ This repository attempts to reproduce the results presented in:
   (See CITATION file for detailed citation)
 
 Please be adviced before using this implementation as a reference that the 
-error rates from running the implementation are very poor, and does not 
+error rates from running the implementation are rather poor, and does not 
 reach the values achieved in the cited paper. This indicates that there very
 likely are errors in the implementation due do misinterpretations or ambiguities.
 

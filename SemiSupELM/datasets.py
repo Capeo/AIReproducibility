@@ -197,6 +197,17 @@ def generate_folds_SS(dataset, size, L, U, V, T):
                      'T':[int(x) for x in _test]}
         PARTITIONS.append(partition)
 
+
+    # ascertain that the test sets from the k folds are distinct
+    # and that they together form the full dataset
+    test_sets = [set(part['T']) for part in PARTITIONS]
+    assert len(set.union(*test_sets)) == size
+    for m,Sx in enumerate(test_sets):
+      for n,Sy in enumerate(test_sets):
+        if m == n:
+          continue
+        assert not set.intersection(Sx,Sy)
+
     return PARTITIONS
 
 
