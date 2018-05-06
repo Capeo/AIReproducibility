@@ -29,7 +29,6 @@ def gen_inlayer(ni, nh):
      Nxnh = Nxni X nixnh
     """
     W = np.random.uniform(low=-1.0, high=1.0, size=(ni, nh))
-    W = W.astype(np.float64)
     return W
 
 def get_label_proportions(labeled, label_to_index_map):
@@ -43,6 +42,7 @@ def get_label_proportions(labeled, label_to_index_map):
         if key not in proportions:
             proportions[key] = 0
         proportions[key] += 1
+    assert sum(proportions[key] for key in proportions) == len(labeled)
     return proportions
 
 def adjacency(features, n_neighbors, param_sigma):
@@ -62,34 +62,40 @@ def adjacency(features, n_neighbors, param_sigma):
     func = np.vectorize(gaussian, excluded=['sigma'])
     NN = NearestNeighbors(n_neighbors=n_neighbors,
                           algorithm='auto',
+                          metric='euclidean',
                           n_jobs= 1) # setting jobs higher might be faster,
                                      # though it might also cause isses with
                                      # determinism?
     NN.fit(features)
+
+    # ALTERNATIVE 1 (weights = 1)
     #result = NN.kneighbors_graph(mode='connectivity')
+
+    # ALTERNATIVE 2 and 3:
     result = NN.kneighbors_graph(mode='distance')
     actual_sigma = result[result != 0].std()
+    #   ALTERNATIVE 2
     result[result != 0] = func(result[result != 0], actual_sigma)
-    #result[result != 0] = func(result[result != 0], param_sigma) # results are poor with this (param)
+    #   ALTERNATIVE 3 (results are poor with this (param))
+    #result[result != 0] = func(result[result != 0], param_sigma)
+
     return result
 
 def diagonals(W):
     """Calculate D^(-1/2) here because 0 to negative powers in the actual
        diagonal matrix is undefined"""
     components = np.sum(W,axis=1)
-    DPM = np.power(components, -0.5)
-    DPP = np.power(components,  0.5)
+    DPM_components = np.power(components, -0.5)
 
     D = np.diagflat(components)
-    DPM = np.diagflat(DPM)
-    DPP = np.diagflat(DPP)
-    return D,DPM,DPP
+    DPM = np.diagflat(DPM_components)
+    return D,DPM
 
 def laplacian(features, n_neighbours, sigma):
     """Calculate the graph laplacian
 
        The paper mentions that [52] discusses a method of rather than using
-        L directly, using L^p or D^(-1/2)LD^(1/2) to normalize.
+        L directly, using L^p or D^(-1/2)LD^(-1/2) to normalize.
        The cited paper unfortunately is just as vague in its description of this,
         mentioning no method of selecting the integer p. [TODO]
        I can only assume that D here only raises the values on the diagonal to
@@ -97,40 +103,39 @@ def laplacian(features, n_neighbours, sigma):
         raised to the negative power.
     """
     W = adjacency(features, n_neighbours, sigma)
-    D,DPM,DPP = diagonals(W)
+    D,DPM = diagonals(W)
     L = D - W
-    DLD = mmatmul(DPM, L, DPP)
+    DLD = mmatmul(DPM, L, DPM)
     return DLD
 
 def gen_beta(H, L, C0, lam, Y, nh, label_proportions):
     """Generates the beta matrix used in the output layer
        Worth to note is that the paper mentions in the ELM-section that
         beta can be obtained in a more stable manner rather than inverting
-        explicitly, thogh this is never mentioned again, or the method
-        described in detail. 
-       Instead, this section uses numpys method for inverting a matric. TODO?
+        explicitly, though this is never mentioned again, or the method
+        described in detail.
+       Instead, this section uses numpys method for inverting a matrix. TODO?
     """
     # number of samples per class label
-    nlab = sum((label_proportions.get(key) for key in label_proportions))
+    nlab = sum((label_proportions[key] for key in label_proportions))
     C = np.zeros_like(L)
     for key in label_proportions:
         C[key, key] = float(C0)/label_proportions[key]
 
-    HT = np.transpose(H)
     # More labeled examples than hidden neurons
     if nh <= nlab:
         eye = np.eye(nh)
-        inv_arg = eye + mmatmul(HT, C, H) + lam*mmatmul(HT, L, H)
+        inv_arg = eye + mmatmul(H.T, C, H) + lam*mmatmul(H.T, L, H)
         inv = np.linalg.inv(inv_arg)
 
-        beta = mmatmul(inv, HT, C, Y)
+        beta = mmatmul(inv, H.T, C, Y)
     # Less labeled examples than hidden neurons (apparently the more common case)
     else:
-        eye = np.eye(L.shape[0], dtype=L.dtype)
-        inv_arg = eye + mmatmul(C, H, HT) + lam*mmatmul(L, H, HT)
+        eye = np.eye(L.shape[0])
+        inv_arg = eye + mmatmul(C, H, H.T) + lam*mmatmul(L, H, H.T)
         inv = np.linalg.inv(inv_arg)
 
-        beta = mmatmul(HT, inv, C, Y)
+        beta = mmatmul(H.T, inv, C, Y)
     return beta
 
 def eval_h(X, hlayer_w):

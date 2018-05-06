@@ -9,7 +9,7 @@ import time
 def load_dataset(path, add_biases=True, binarize=False):
     """Load a dataset used in the experiment, adding biases to
        the features for mathematical convenience, and binarizing
-       the set by grouing the first N//2 class labels together if appropriate.
+       the set by grouping the first N//2 class labels together if appropriate.
 
        Only pass binarize=True if the class labels in the dataset are
        appropriate (e.g 1-20). [TODO]
@@ -22,7 +22,7 @@ def load_dataset(path, add_biases=True, binarize=False):
         new_X = np.insert(dataset['X'], obj=0, values=1, axis=1)
         dataset['X'] = new_X
 
-    # does not work in general, but works for the datasets uspstb and coil50b
+    # does not work in general, but works for the datasets uspstb and coil20b
     # where labels go from 0 to 9 and 1 to 20 respectively
     if binarize:
         classes = []
@@ -33,7 +33,7 @@ def load_dataset(path, add_biases=True, binarize=False):
 
         # all labels up to and including this belong to the first class
         # (the rest of the labels belong to the second class)
-        # (class 1 is x <= 4 for uspstb  and  x <= 10 coil50b)
+        # (class 1 is x <= 4 for uspstb  and  x <= 10 coil20b)
         first_class = max(num_classes//2,  1)
 
         new_y = np.where(dataset['y'] <= first_class, 1, 2)
