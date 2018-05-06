@@ -1,0 +1,54 @@
+epoch 234000, minibatch 249/249, validation error 4.547619 %
+epoch 235000, minibatch 249/249, validation error 4.547619 %
+epoch 236000, minibatch 249/249, validation error 4.547619 %
+epoch 237000, minibatch 249/249, validation error 4.547619 %
+epoch 238000, minibatch 249/249, validation error 4.547619 %
+epoch 239000, minibatch 249/249, validation error 4.547619 %
+epoch 240000, minibatch 249/249, validation error 4.535714 %
+epoch 241000, minibatch 249/249, validation error 4.535714 %
+epoch 242000, minibatch 249/249, validation error 4.535714 %
+epoch 243000, minibatch 249/249, validation error 4.535714 %
+epoch 244000, minibatch 249/249, validation error 4.547619 %
+epoch 245000, minibatch 249/249, validation error 4.547619 %
+epoch 246000, minibatch 249/249, validation error 4.547619 %
+epoch 247000, minibatch 249/249, validation error 4.535714 %
+epoch 248000, minibatch 249/249, validation error 4.535714 %
+epoch 249000, minibatch 249/249, validation error 4.535714 %
+epoch 250000, minibatch 249/249, validation error 4.535714 %
+Optimization complete with best validation score of 4.440476 %,with test performance 4.397590 %
+The fine tuning code for file pavia_SdA.py ran for 371.84m
+... getting filters
+... saving parameters
+... classifying test set with learnt model:
+Detailed information in each category:
+                          Number of Samples
+Class No.       TRAIN   VALID   TEST    RightCount   RightRate
+0               3944    1382    1267    1225    0.966851
+1               10498   3541    3498    3424    0.978845
+2               1181    410     426     366     0.859155
+3               1827    658     635     605     0.952756
+4               849     241     255     253     0.992157
+5               3005    1001    1023    958     0.936461
+6               815     244     271     253     0.933579
+7               2207    741     734     661     0.900545
+8               574     182     191     190     0.994764
+Overall         24900   8400    8300    7935    0.956024
+kappa index of agreement: 0.942444
+confusion matrix:
+[[1225    0    5    0    0    5   12   20    0]
+ [   0 3424    1   19    0   52    0    2    0]
+ [   4    1  366    0    0    0    0   55    0]
+ [   0   27    0  605    1    2    0    0    0]
+ [   0    1    0    1  253    0    0    0    0]
+ [   0   63    0    1    0  958    0    1    0]
+ [  17    0    0    0    0    0  253    1    0]
+ [  19    5   47    0    0    1    1  661    0]
+ [   1    0    0    0    0    0    0    0  190]]
+... classifying the whole image with learnt model:
+finished, running time:0.000425m
+... performing Student's t-test
+Total number of tests: 10
+        std             mean
+k_sae   0.001126        0.941352
+k_svm   0.001364        0.936028
+left = 1615.380101, right = 1.734064, test PASSED.

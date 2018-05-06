@@ -1,0 +1,65 @@
+epoch 382000, minibatch 31/31, validation error 25.181818 %
+epoch 383000, minibatch 31/31, validation error 26.909091 %
+epoch 384000, minibatch 31/31, validation error 27.000000 %
+epoch 385000, minibatch 31/31, validation error 27.909091 %
+epoch 386000, minibatch 31/31, validation error 28.636364 %
+epoch 387000, minibatch 31/31, validation error 26.090909 %
+epoch 388000, minibatch 31/31, validation error 24.090909 %
+epoch 389000, minibatch 31/31, validation error 23.272727 %
+epoch 390000, minibatch 31/31, validation error 19.909091 %
+     epoch 390000, minibatch 31/31, test error of best model 18.545455 %
+epoch 391000, minibatch 31/31, validation error 20.727273 %
+epoch 392000, minibatch 31/31, validation error 24.363636 %
+epoch 393000, minibatch 31/31, validation error 22.636364 %
+epoch 394000, minibatch 31/31, validation error 23.181818 %
+epoch 395000, minibatch 31/31, validation error 22.636364 %
+epoch 396000, minibatch 31/31, validation error 22.727273 %
+epoch 397000, minibatch 31/31, validation error 23.090909 %
+epoch 398000, minibatch 31/31, validation error 23.454545 %
+epoch 399000, minibatch 31/31, validation error 22.545455 %
+epoch 400000, minibatch 31/31, validation error 22.363636 %
+Optimization complete with best validation score of 19.909091 %,with test performance 18.545455 %
+The fine tuning code for file ksc_SdA.py ran for 33.99m
+... getting filters
+... saving parameters
+... classifying test set with learnt model:
+Detailed information in each category:
+                          Number of Samples
+Class No.       TRAIN   VALID   TEST    RightCount   RightRate
+0               458     148     145     137     0.944828
+1               140     52      51      43      0.843137
+2               141     62      53      41      0.773585
+3               159     51      42      7       0.166667
+4               95      30      36      18      0.500000
+5               147     46      36      1       0.027778
+6               56      25      24      0       0.000000
+7               275     93      108     59      0.546296
+8               283     128     109     109     1.000000
+9               243     87      74      71      0.959459
+10              249     74      96      93      0.968750
+11              298     123     123     94      0.764228
+12              556     181     203     203     1.000000
+Overall         3100    1100    1100    876     0.796364
+kappa index of agreement: 0.772067
+confusion matrix:
+[[137   2   2   1   0   0   0   2   1   0   0   0   0]
+ [  3  43   3   0   0   0   2   0   0   0   0   0   0]
+ [  0   0  41  10   0   0   0   0   2   0   0   0   0]
+ [  3   0  26   7   5   0   0   1   0   0   0   0   0]
+ [  1   0  11   5  18   0   0   0   1   0   0   0   0]
+ [ 13   0  13   5   2   1   0   1   1   0   0   0   0]
+ [  0   0  24   0   0   0   0   0   0   0   0   0   0]
+ [  0   1   0   0   0   0   0  59  48   0   0   0   0]
+ [  0   0   0   0   0   0   0   0 109   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   2  71   0   1   0]
+ [  0   0   0   0   0   0   0   0   3   0  93   0   0]
+ [  0   0   0   0   0   0   0  18   1   3   4  94   3]
+ [  0   0   0   0   0   0   0   0   0   0   0   0 203]]
+... classifying the whole image with learnt model:
+finished, running time:0.000822m
+... performing Student's t-test
+Total number of tests: 100
+        std             mean
+k_sae   0.009187        0.762301
+k_svm   0.006538        0.907805
+left = -1138.711635, right = 1.652586, test FAILED.

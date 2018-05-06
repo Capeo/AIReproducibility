@@ -1,0 +1,77 @@
+och 173000, minibatch 62/62, validation error 71.636364 %
+epoch 174000, minibatch 62/62, validation error 79.090909 %
+epoch 175000, minibatch 62/62, validation error 66.363636 %
+epoch 176000, minibatch 62/62, validation error 78.636364 %
+epoch 177000, minibatch 62/62, validation error 67.000000 %
+epoch 178000, minibatch 62/62, validation error 70.909091 %
+epoch 179000, minibatch 62/62, validation error 67.545455 %
+epoch 180000, minibatch 62/62, validation error 65.181818 %
+epoch 181000, minibatch 62/62, validation error 63.727273 %
+epoch 182000, minibatch 62/62, validation error 68.363636 %
+epoch 183000, minibatch 62/62, validation error 66.545455 %
+epoch 184000, minibatch 62/62, validation error 76.454545 %
+epoch 185000, minibatch 62/62, validation error 71.363636 %
+epoch 186000, minibatch 62/62, validation error 82.454545 %
+epoch 187000, minibatch 62/62, validation error 71.545455 %
+epoch 188000, minibatch 62/62, validation error 68.636364 %
+epoch 189000, minibatch 62/62, validation error 68.818182 %
+epoch 190000, minibatch 62/62, validation error 72.545455 %
+epoch 191000, minibatch 62/62, validation error 58.727273 %
+     epoch 191000, minibatch 62/62, test error of best model 56.272727 %
+epoch 192000, minibatch 62/62, validation error 67.272727 %
+epoch 193000, minibatch 62/62, validation error 65.272727 %
+epoch 194000, minibatch 62/62, validation error 71.727273 %
+epoch 195000, minibatch 62/62, validation error 66.090909 %
+epoch 196000, minibatch 62/62, validation error 62.545455 %
+epoch 197000, minibatch 62/62, validation error 68.636364 %
+epoch 198000, minibatch 62/62, validation error 66.818182 %
+epoch 199000, minibatch 62/62, validation error 72.909091 %
+epoch 200000, minibatch 62/62, validation error 78.454545 %
+Optimization complete with best validation score of 58.727273 %,with test performance 56.272727 %
+The training code for file ksc_spatial_SdA.py ran for 122.69m
+... saving parameters
+... classifying test set with learnt model:
+Detailed information in each category:
+                          Number of Samples
+Class No.       TRAIN   VALID   TEST    RightCount   RightRate
+0               458     148     145     0       0.000000
+1               140     52      51      0       0.000000
+2               141     62      53      0       0.000000
+3               159     51      42      3       0.071429
+4               95      30      36      1       0.027778
+5               147     46      36      0       0.000000
+6               56      25      24      0       0.000000
+7               275     93      108     50      0.462963
+8               283     128     109     0       0.000000
+9               243     87      74      25      0.337838
+10              249     74      96      0       0.000000
+11              298     123     123     11      0.089431
+12              556     181     203     182     0.896552
+Overall         3100    1100    1100    272     0.247273
+kappa index of agreement: 0.133999
+confusion matrix:
+[[  0   0   0   0   0   0   0 145   0   0   0   0   0]
+ [  1   0   0   0   0   0   0   9   2   9   0   0  30]
+ [  0   0   0   1   0   0   0  48   0   1   0   0   3]
+ [  2   0   0   3   0   0   0  24   2   3   0   0   8]
+ [  0   0   0   1   1   0   0  14   0   2   0   0  18]
+ [  0   0   0   0   0   0   0  34   0   2   0   0   0]
+ [  0   0   0   0   0   0   0  13   0   2   0   0   9]
+ [  3   0   0   0   0   0   0  50   0   2   0   0  53]
+ [ 60   0   0   0   0   0   0  24   0  25   0   0   0]
+ [  2   0   0   0   0   0   0   9   3  25   0   4  31]
+ [ 14   0   0   0   0   0   0   0  79   1   0   0   2]
+ [  4   0   0   1   0   0   0   0   1  23   0  11  83]
+ [  4   0   0   0   0   0   0   3   0  10   0   4 182]]
+... classifying the whole image with learnt model:
+...... extracting data
+...... begin 
+...... done 
+finished, running time:0.147686s
+Saving classification results
+... performing Student's t-test
+Total number of tests: 100
+        std             mean
+k_sae   0.008622        0.123316
+k_svm   0.009197        0.668382
+left = -3412.400164, right = 1.652586, test FAILED.

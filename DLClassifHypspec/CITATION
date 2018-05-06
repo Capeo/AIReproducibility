@@ -1,0 +1,12 @@
+@ARTICLE{6844831,
+author={Y. Chen and Z. Lin and X. Zhao and G. Wang and Y. Gu},
+journal={IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing},
+title={Deep Learning-Based Classification of Hyperspectral Data},
+year={2014},
+volume={7},
+number={6},
+pages={2094-2107},
+keywords={geophysical image processing;hyperspectral imaging;image classification;learning (artificial intelligence);neural nets;principal component analysis;regression analysis;remote sensing;classical spectral information-based classification;deep learning architecture;deep learning-based classification;hyperspectral data classification;logistic regression;principle component analysis;spatial-dominated information;spectral-spatial deep neural network;stacked autoencoders;Feature extraction;Hyperspectral imaging;Logistics;Principal component analysis;Support vector machines;Training;Autoencoder (AE);deep learning;feature extraction;hyperspectral data classification;logistic regression;stacked autoencoder (SAE);support vector machine (SVM)},
+doi={10.1109/JSTARS.2014.2329330},
+ISSN={1939-1404},
+month={June},}
