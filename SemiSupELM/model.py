@@ -5,22 +5,6 @@ import os
 import math
 import time
 
-def mmatmul(*args):
-    """Matrix multiplication with several arguments, should be associative
-       save for floating point inaccuracies between different evaluation
-       orders.
-       Purely to make the code more readable, I could not find numpy support
-       for several arguments to one call.
-       AxBxCxD -> [A,B,C,D]
-        result = (Ax(Bx(CxD)))
-    """
-    args = list(args)
-    result = args.pop()
-    while args:
-        arg = args.pop()
-        result = np.matmul(arg,result)
-    return result
-
 def gen_inlayer(ni, nh):
     """Returns a matrix niXnh that represents the mapping
        from ni to nh, obtained via matrix multiplication via an input
@@ -105,7 +89,7 @@ def laplacian(features, n_neighbours, sigma):
     W = adjacency(features, n_neighbours, sigma)
     D,DPM = diagonals(W)
     L = D - W
-    DLD = mmatmul(DPM, L, DPM)
+    DLD = DPM @ L @ DPM
     return DLD
 
 def gen_beta(H, L, C0, lam, Y, nh, label_proportions):
@@ -125,27 +109,27 @@ def gen_beta(H, L, C0, lam, Y, nh, label_proportions):
     # More labeled examples than hidden neurons
     if nh <= nlab:
         eye = np.eye(nh)
-        inv_arg = eye + mmatmul(H.T, C, H) + lam*mmatmul(H.T, L, H)
+        inv_arg = eye + (H.T @ C @ H) + lam*(H.T @ L @ H)
         inv = np.linalg.inv(inv_arg)
 
-        beta = mmatmul(inv, H.T, C, Y)
+        beta = (inv @ H.T @ C @ Y)
     # Less labeled examples than hidden neurons (apparently the more common case)
     else:
         eye = np.eye(L.shape[0])
-        inv_arg = eye + mmatmul(C, H, H.T) + lam*mmatmul(L, H, H.T)
+        inv_arg = eye + (C @ H @ H.T) + lam*(L @ H @ H.T)
         inv = np.linalg.inv(inv_arg)
 
-        beta = mmatmul(H.T, inv, C, Y)
+        beta = (H.T @ inv @ C @ Y)
     return beta
 
 def eval_h(X, hlayer_w):
-    hidden = mmatmul(X, hlayer_w)
+    hidden = (X @ hlayer_w)
     sig = logistic.cdf(hidden)
     return sig
 
 def evaluate_model(X, hlayer_w, beta):
     H = eval_h(X, hlayer_w)
-    result = mmatmul(H, beta)
+    result = (H @ beta)
     return result
 
 def __IDX2LAB(idx, map):
