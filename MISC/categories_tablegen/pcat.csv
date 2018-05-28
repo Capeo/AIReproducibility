@@ -1,0 +1,21 @@
+Category Id,Problem Category,Papers
+P1,"For R1 article, the experiment code is not shared, or the experiment code does not cover all experiments","1, 4, 12, 10, 17"
+P2,"For R1 article, the method code does not cover the entire method as described in the paper",4
+P3,"For R1 article, the code is poorly documented","4, 10"
+P4,"For R1 article, the parameter values shared with the code are not complete, or differ from the values given in the paper","12, 17"
+P5,"For R1 article, trained weights supplied with the code are not the same as was used in original experiments",4
+P6,"For R1 article, code was not versioned, or the paper did not state which version was used in experiments","1, 4, 17"
+P7,"An implementation is shared, but the code is not inspectable. ","13, 16"
+P8,"Random numbers, random number generator, and random seed are not shared","1, 4, 5"
+P9,"An aspect of the method is not described, or described in a manner difficult to understand","5, 9, 18, 19"
+P10,"An aspect of the experiment is not described, or described in a manner difficult to understand","2, 7, 11, 13, 9, 18, 19, 20"
+P11,"The implementation of the method, or an aspect of it, is not described, or difficult to understand","2, 3, 5, 7, 8, 11, 14, 9, 16, 18, 19"
+P12,"Multiple methods or implementations are suggested, but which variation is used is not stated","8, 18"
+P13,Not all parameter or hyper-parameters needed are given,"6, 15, 17, 18"
+P14,There is a possible error in the paper,9
+P15,There is a mismatch between a data set as described in the paper and as available online,"6, 13, 16, 19, 20"
+P16,A necessary subset of a data set is not shared,"13, 19"
+P17,"Augmented or pre-processed data set is not shared, and the method for pre-rpocessing and data augmentation is not clearly described","8, 11, 16, 19"
+P18,"Partition of data into training, validation, and test set is not shared, and the method for performing the partition is not clearly described","11, 18, 19, 20"
+P19,"Results, although quantitative, are presented in a manner unsuitable for reproduction","2, 13"
+P20,Significant resource demands (hardware or software) make reproduction complicated,"7, 22"
