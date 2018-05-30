@@ -76,6 +76,34 @@ def savefig(heatmap, path, **kwargs):
     plt.clf()
     return fig
 
+def save_heatmap_vertical(heatmap, path, **kwargs):
+    fig = sns.heatmap(heatmap, **kwargs)
+    fig.xaxis.tick_top()
+    fig.set_ylabel("Paper")
+    fig.get_figure().savefig(path)
+    # clear figure
+    plt.clf()
+    return fig
+
+def save_stacked_bar_chart(frame, path, xlabel, ylabel, **kwargs):
+    frame = frame.T
+    fig = frame.plot.bar(stacked=True, **kwargs)
+    fig.set_xlabel(xlabel)
+    fig.set_ylabel(ylabel)
+    fig.get_figure().savefig(path)
+    plt.clf()
+    return fig
+
+def save_horizontal_bar_chart(frame, path, **kwargs):
+    fig = frame.plot.barh(**kwargs)
+    fig.invert_yaxis()
+    fig.xaxis.tick_top()
+    fig.set_ylabel("Paper")
+    fig.set_xlabel("Count")
+    fig.xaxis.set_label_position('top')
+    fig.get_figure().savefig(path)
+    plt.clf()
+
 def blend(path1, path2, output_path):
     img1 = np.asarray(Image.open(path1))
     img2 = np.asarray(Image.open(path2))
@@ -85,6 +113,7 @@ def blend(path1, path2, output_path):
     img.save(output_path)
 
 def main(output_directory):
+    plt.style.use('seaborn-white')
     #{ ass:[full_map, R1_map, R2_map],
     #  prob:[...],
     #  ...}
@@ -126,6 +155,20 @@ def main(output_directory):
             path = os.path.join(output_directory, filename)
             savefig(heatmap , path, square=True, annot=True)
 
+        # generate bar charts
+        r1_map = pd.DataFrame(maps[overall_category][1].iloc[:,3:].sum(axis=0)).T
+        r1_map.index = ["R1"]
+        r2_map = pd.DataFrame(maps[overall_category][2].iloc[:,3:].sum(axis=0)).T
+        r2_map.index = ["R2"]
+        combined_map = pd.concat([r1_map, r2_map])
+        for division, divtag in zip([combined_map, r1_map, r2_map], ["both", "R1", "R2"]):
+            filename = "{}_{}_bar".format(
+                overall_category,
+                divtag)
+            path = os.path.join(output_directory, filename)
+            save_stacked_bar_chart(division, path, overall_category.capitalize(), "Count")
+
+
         # 1D version, R1 and R2 normalized to number of papers
         # [R1, R2]
         R1 = pd.DataFrame(maps[overall_category][1].iloc[:,3:])
@@ -150,6 +193,21 @@ def main(output_directory):
         filename = "{}_{}.png".format("blended", overall_category)
         output_path = os.path.join(output_directory, filename)
         blend(path1, path2, output_path)
+
+    # plot problems, assumptions, and errors per paper
+    category_maps = []
+    for overall_category in maps:
+        frame = pd.DataFrame(maps[overall_category][0].iloc[:,3:].sum(axis=1))
+        # rename column
+        frame.columns = [overall_category.capitalize()]
+        category_maps.append(frame)
+    frames = pd.concat(category_maps, axis=1)
+    filename = "papers_bar.png"
+    output_path = os.path.join(output_directory, filename)
+    save_horizontal_bar_chart(frames, output_path, cmap='tab20b', width=0.5, figsize=(6,12))
+    filename = "papers_heatmap.png"
+    output_path = os.path.join(output_directory, filename)
+    save_heatmap_vertical(frames, output_path, annot=True)
 
 if __name__ == '__main__':
     main(output_directory="output_figures")
