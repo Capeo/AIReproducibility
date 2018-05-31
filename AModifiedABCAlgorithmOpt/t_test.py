@@ -42,7 +42,7 @@ def manual_t_test(paper_mean, this_mean, paper_std, this_std, paper_runs, this_r
     print("[manual ttest]")
     error_diff = abs(paper_mean - this_mean)
     insig = False
-    if error_diff < 10**(-7):
+    if error_diff < 10**(-7): # or this_mean < 10**(-7):
         insig = True
         pprint = lambda s: print("*{:^72}*".format(s))
         print("*"*(72+2))
