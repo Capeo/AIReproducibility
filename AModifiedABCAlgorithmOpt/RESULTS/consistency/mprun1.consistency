@@ -1,0 +1,127 @@
+Finding consistency of runfile:
+File: RESULTS/dumps/mprun1.run
+
+Below are the means and standard deviations of the alternative
+9 methods from tables 2 and 3 (e.g PSO), in the order they appear,
+for each function (shown here purely for reference):
+Sphere (PSO+OTHER VARIANTS):
+7.96E-51 ± 3.56E-50
+9.84E-105 ± 4.21E-104
+2.13E-35 ± 6.17E-35
+1.37E-79 ± 5.60E-79
+9.84E-118 ± 3.56E-117
+2.21E-90 ± 9.88E-90
+3.15E-30 ± 4.56E-30
+4.98E-45 ± 1.00E-44
+5.15E-29 ± 2.16E-28
+
+Rosenbrock (PSO+OTHER VARIANTS):
+3.08E+00 ± 7.69E-01
+6.98E-01 ± 1.46E+00
+3.92E+00 ± 1.19E+00
+8.60E-01 ± 1.56E+00
+1.40E+00 ± 1.88E+00
+8.67E-01 ± 1.63E+00
+2.78E+00 ± 2.26E-01
+1.53E+00 ± 1.70E+00
+2.46E+00 ± 1.70E+00
+
+Ackley (PSO+OTHER VARIANTS):
+1.58E-14 ± 1.60E-14
+9.18E-01 ± 1.01E+00
+6.04E-15 ± 1.67E-15
+5.78E-02 ± 2.58E-01
+1.33E+00 ± 1.48E+00
+3.18E-14 ± 6.40E-14
+3.75E-15 ± 2.13E-14
+1.49E-14 ± 6.97E-15
+4.32E-10 ± 2.55E-14
+
+Griewank (PSO+OTHER VARIANTS):
+9.69E-02 ± 5.01E-02
+1.19E-01 ± 7.11E-02
+7.80E-02 ± 3.79E-02
+2.80E-02 ± 6.34E-02
+1.04E-01 ± 7.10E-02
+9.24E-02 ± 5.61E-02
+1.31E-01 ± 9.32E-02
+4.07E-02 ± 2.80E-02
+4.56E-03 ± 4.81E-03
+
+Weierstrass (PSO+OTHER VARIANTS):
+2.28E-03 ± 7.04E-03
+6.69E-01 ± 7.17E-01
+1.41E-06 ± 6.31E-06
+7.85E-02 ± 5.16E-02
+1.14E+00 ± 1.17E+00
+3.01E-03 ± 7.20E-03
+2.02E-03 ± 6.40E-03
+1.07E-15 ± 1.67E-15
+0.00E+00 ± 0.00E+00
+
+Rastrigin (PSO+OTHER VARIANTS):
+5.82E+00 ± 2.96E+00
+1.25E+01 ± 5.17E+00
+3.88E+00 ± 2.30E+00
+9.05E+00 ± 3.48E+00
+1.17E+01 ± 6.11E+00
+7.51E+00 ± 3.05E+00
+2.12E+00 ± 1.33E+00
+0.00E+00 ± 0.00E+00
+0.00E+00 ± 0.00E+00
+
+Noncontinuous_Rastrigin (PSO+OTHER VARIANTS):
+4.05E+00 ± 2.58E+00
+1.20E+01 ± 4.99E+00
+4.77E+00 ± 2.84E+00
+5.95E+00 ± 2.60E+00
+5.85E+00 ± 3.15E+00
+3.35E+00 ± 2.01E+00
+4.35E+00 ± 2.80E+00
+2.00E-01 ± 4.10E-01
+0.00E+00 ± 0.00E+00
+
+Schwefel (PSO+OTHER VARIANTS):
+3.20E+02 ± 1.85E+02
+9.87E+02 ± 2.76E+02
+3.26E+02 ± 1.32E+02
+8.78E+02 ± 2.93E+02
+1.08E+03 ± 2.68E+02
+8.51E+02 ± 2.76E+02
+7.10E+01 ± 1.50E+02
+2.13E+02 ± 1.41E+02
+0.00E+00 ± 0.00E+00
+
+=== CONSISTENCY RESULTS BETWEEN PAPER AND REPRODUCTION ===
+Sphere: 
+  All:  True
+  deg: 1.00
+
+Rosenbrock: 
+  All: False
+  deg: 0.80
+
+Ackley: 
+  All: False
+  deg: 0.79
+
+Griewank: 
+  All: False
+  deg: 0.62
+
+Weierstrass: 
+  All: False
+  deg: 0.78
+
+Rastrigin: 
+  All: False
+  deg: 0.64
+
+Noncontinuous_Rastrigin: 
+  All: False
+  deg: 0.60
+
+Schwefel: 
+  All: False
+  deg: 0.82
+

@@ -67,7 +67,7 @@ def gen_table(runfile, include_paper=True):
     this_mean = np.mean(runs)
     this_std = np.std(runs)
 
-    if abs(paper_mean - this_mean) < 10**(-7):
+    if abs(paper_mean - this_mean) < 10**(-7): #  or this_mean < 10**(-7):
         lowlim = "*"
     else:
         lowlim = ""

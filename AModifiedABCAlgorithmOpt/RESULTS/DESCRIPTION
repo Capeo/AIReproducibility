@@ -37,3 +37,25 @@ This is a slightly "cleaner" version of the json_list-files, and tries to
 mimic the way results are presented in tables in the paper, although it does
 not use a t-test as the program t_test.py does. The file was created by simply
 redirecting thestdout from generate_tables.py
+
+* The directory ./consistency contains a measure of consistency between the
+paper results and the reproduction results.
+
+(the implementation details may vary a slight bit from the description below)
+For each function, the paper presents some number of reults for PSO+other variants,
+and some number of ABC-results for different parameter configurations.
+
+Each of these ABC results are compared to each of the variant results, resulting in
+MxN comparisons -- Each comparison is one of (-1, 0, 1) depending on whether the 
+query is less than, equal to, or greater than the variant result being queried.
+
+This same process is performed on the reproduction results (using the same variant
+results to compare to), for a second MxN table of booleans.
+
+By checking whether or not the booleans in the two tables are the same, it is possible
+to ascertain whether the paper and the reproduction attempt at least compare the same
+way to the alternatives, and if they do compare the same way, the reproduction is considered
+consistent (it is possible to count the number of similar booleans to get a degree of consistency).
+
+Note that this does not account for the standard deviation, which it ideally should. [TODO]
+
