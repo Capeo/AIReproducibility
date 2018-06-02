@@ -1,16 +1,15 @@
-"Category Id","Error Category","Papers"
-"E1","For R1 article, the code available is not exactly the same as was used in the original experiments","1, 4"
-"E2","For R1 article, the parameter values provided with available code are not the same as was used in the original experiments","1, 4"
-"E3","For R1 article, the weights or trained parameters used are not the same as was used in the original experiment","1, 4, 12"
-"E4","There are errors in our assumptions about the method","5, 18, 9"
-"E5","There are errors in our assumptions about the experiment","6, 18, 9"
-"E6","There are errors in our assumptions about the implementation","3, 5, 13, 18, 9"
-"E7","There are unknown errors in our implementation of the method","2, 3, 5, 6, 8, 13, 18, 9"
-"E8","There are unknown errors in our implementation of the experiment","1, 2, 3, 4, 6, 8, 13, 18, 9"
-"E9","An implementation in a third party library is not equivalent to the implementation used in the original experiment","6, 11"
-"E10","The parameters used in the reproduction are not the same as was used in the original experiment","6, 15, 18, 17"
-"E11","The randomness in the method or experiment, and the lack of shared random numbers and random number generator, influences the result","8, 11, 9"
-"E12","Augmented and pre-processed data set used in reproduction is not equivalent to the data set used in original experiment","8, 11, 17"
-"E13","The data subset used in reproduction is not the same as was used in original experiment",13
-"E14","The partitioning of data into training, validation, and test set is not the same as was used in the original experiment",11
-"E15","Differences in hardware influenced the result",12
+Category Id,Error Category,Papers
+E1,"For R1 study, the code available is not exactly the same as was used in the original experiments","1, 4"
+E2,There are errors in our assumptions about the method,"5, 18, 9"
+E3,There are errors in our assumptions about the experiment,"6, 18, 9"
+E4,There are errors in our assumptions about the implementation,"3, 5, 13, 18, 9"
+E5,There are unknown errors in our implementation of the method,"2, 3, 5, 6, 8, 13, 18, 9, 22"
+E6,There are unknown errors in our implementation of the experiment,"1, 2, 3, 4, 6, 8, 13, 18, 9"
+E7,An implementation in a third party library is not equivalent to the implementation used in the original experiment,"6, 11"
+E8,The trained weights or trained parameters shared are not the same as was used in the original experiment,"1, 4, 12, 22"
+E9,The parameters are not the same as was used in the original experiment,"1, 4, 6, 15, 18, 17"
+E10,"The randomness in the method or experiment, and the lack of shared random numbers and random number generator, influences the result","8, 11, 9"
+E11,Augmented and pre-processed data set used in reproduction is not equivalent to the data set used in original experiment,"8, 11, 17"
+E12,The data subset used in reproduction is not the same as was used in original experiment,"11, 13"
+E13,"The partitioning of data into training, validation, and test set is not the same as was used in the original experiment",11
+E14,Differences in hardware influenced the result,12
