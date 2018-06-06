@@ -85,7 +85,7 @@ def savefig(heatmap, path, **kwargs):
     return fig
 
 def save_heatmap_vertical(heatmap, path, ylabel, **kwargs):
-    fig = sns.heatmap(heatmap, **kwargs)
+    fig = sns.heatmap(heatmap, cmap=sns.cm.rocket_r, **kwargs)
     fig.xaxis.tick_top()
     fig.set_ylabel(ylabel)
     fig.get_figure().savefig(path)
@@ -217,6 +217,7 @@ def main(output_directory):
         blend(path1, path2, output_path)
 
     # plot problems, assumptions, and errors per paper
+    #   bar plot
     category_maps = []
     for overall_category in maps:
         frame = pd.DataFrame(maps[overall_category][0].iloc[:,3:].sum(axis=1))
@@ -228,11 +229,17 @@ def main(output_directory):
     output_path = os.path.join(output_directory, filename)
     save_horizontal_bar_chart(frames, output_path, "Count", "Article", width=0.5, figsize=(6,12))
 
+    #   plot heatmap
     filename = "papers_heatmap.png"
     output_path = os.path.join(output_directory, filename)
-    save_heatmap_vertical(frames, output_path, "Article", annot=True)
+    for column in frames:
+        max_value = frames[column].max()
+        frames[column] = frames[column].divide(max_value)
+    frames = frames.round(2)
+    save_heatmap_vertical(frames, output_path, "Article", annot=False)
 
     # plot problems, assumptions, and errors per paper, grouped by type
+    #   bar plot
     frame = pd.DataFrame(maps["problem"][0])
     sorted = frame.sort_values(['R1/R2', 'ID'])
     ids = sorted['ID']
@@ -250,11 +257,8 @@ def main(output_directory):
     output_path = os.path.join(output_directory, filename)
     save_horizontal_bar_chart(frames, output_path, "Count", "Article", width=0.5, figsize=(6, 12))
 
-    filename = "papers_type_heatmap.png"
-    output_path = os.path.join(output_directory, filename)
-    save_heatmap_vertical(frames, output_path, "Article", annot=True)
-
     # plot problems, assumptions, and errors per paper, grouped by outcome
+    #   bar plot
     outcomes = ["Success", "Partial success", "Failure", "No Result"]
     frame = pd.DataFrame(outcome_maps["problem"][0])
     nr_rows = frame.shape[0]
@@ -308,10 +312,6 @@ def main(output_directory):
     fig.xaxis.set_label_position('top')
     fig.get_figure().savefig(output_path)
     plt.clf()
-
-    filename = "papers_outcome_heatmap.png"
-    output_path = os.path.join(output_directory, filename)
-    save_heatmap_vertical(frames, output_path, "Article", annot=True)
 
 if __name__ == '__main__':
     main(output_directory="output_figures")

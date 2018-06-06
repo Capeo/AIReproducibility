@@ -1,11 +1,11 @@
 Category Id,Error Category,Papers
-E1,"For R1 study, the code available is not exactly the same as was used in the original experiments","1, 4"
+E1,"For R1 study, the code available is not exactly the same as was used in the original experiments","1, 4, 17"
 E2,There are errors in our assumptions about the method,"5, 18, 9"
-E3,There are errors in our assumptions about the experiment,"6, 18, 9"
+E3,There are errors in our assumptions about the experiment,"6, 18"
 E4,There are errors in our assumptions about the implementation,"3, 5, 13, 18, 9"
 E5,There are unknown errors in our implementation of the method,"2, 3, 5, 6, 8, 13, 18, 9, 22"
 E6,There are unknown errors in our implementation of the experiment,"1, 2, 3, 4, 6, 8, 13, 18, 9"
-E7,An implementation in a third party library is not equivalent to the implementation used in the original experiment,"6, 11"
+E7,An implementation in a third party library is not equivalent to the implementation used in the original experiment,"6, 11, 17, 18"
 E8,The trained weights or trained parameters shared are not the same as was used in the original experiment,"1, 4, 12, 22"
 E9,The parameters are not the same as was used in the original experiment,"1, 4, 6, 15, 18, 17"
 E10,"The randomness in the method or experiment, and the lack of shared random numbers and random number generator, influences the result","8, 11, 9"
@@ -13,3 +13,4 @@ E11,Augmented and pre-processed data set used in reproduction is not equivalent 
 E12,The data subset used in reproduction is not the same as was used in original experiment,"11, 13"
 E13,"The partitioning of data into training, validation, and test set is not the same as was used in the original experiment",11
 E14,Differences in hardware influenced the result,12
+E15,The reproduced results are difficult to compare to the original results,10
