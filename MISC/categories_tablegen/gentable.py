@@ -3,6 +3,7 @@ from PIL import Image
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import matplotlib
 import matplotlib.pyplot as plt
 
 import math
@@ -35,7 +36,7 @@ def split_list(category_papers_field):
 
 def create_heatmap(papers, categories):
     # rows of paper IDs, class, and titles -- the first three columns
-    paper_rows = papers.iloc[:,0:3] #[papers.keys()[0:3]]
+    paper_rows = papers.iloc[:,0:4] #[papers.keys()[0:3]]
     # rows of category IDs (e.g P10)
     category_identifiers = categories.iloc[:,0]
 
@@ -69,10 +70,46 @@ def split_into_R1_R2(heatmap):
     R2 = heatmap.loc[heatmap["R1/R2"] == "R2"]
     return R1,R2
 
+def split_on_outcome(heatmap):
+    success = heatmap.loc[heatmap["Overall outcome"] == "Success"]
+    partial = heatmap.loc[heatmap["Overall outcome"] == "Partial success"]
+    failure = heatmap.loc[heatmap["Overall outcome"] == "Failure"]
+    no_result = heatmap.loc[heatmap["Overall outcome"] == "No Result"]
+    return success, partial, failure, no_result
+
 def savefig(heatmap, path, **kwargs):
     fig = sns.heatmap(heatmap, **kwargs)
     fig.get_figure().savefig(path)
     # clear figure
+    plt.clf()
+    return fig
+
+def save_heatmap_vertical(heatmap, path, ylabel, **kwargs):
+    fig = sns.heatmap(heatmap, cmap=sns.cm.rocket_r, **kwargs)
+    fig.xaxis.tick_top()
+    fig.set_ylabel(ylabel)
+    fig.get_figure().savefig(path)
+    # clear figure
+    plt.clf()
+    return fig
+
+def save_stacked_bar_chart(frame, path, xlabel, ylabel, **kwargs):
+    frame = frame.T
+    fig = frame.plot.bar(stacked=True, **kwargs)
+    fig.set_xlabel(xlabel, labelpad=4)
+    fig.set_ylabel(ylabel, labelpad=5)
+    fig.get_figure().savefig(path)
+    plt.clf()
+    return fig
+
+def save_horizontal_bar_chart(frame, path, xlabel, ylabel, **kwargs):
+    fig = frame.plot.barh(**kwargs)
+    fig.invert_yaxis()
+    fig.xaxis.tick_top()
+    fig.set_xlabel(xlabel)
+    fig.set_ylabel(ylabel)
+    fig.xaxis.set_label_position('top')
+    fig.get_figure().savefig(path)
     plt.clf()
     return fig
 
@@ -85,13 +122,27 @@ def blend(path1, path2, output_path):
     img.save(output_path)
 
 def main(output_directory):
+    plt.style.use('seaborn-white')
+    custom_cmap = matplotlib.colors.ListedColormap(["blue", "green", "red"], name='from_list', N=None)
     #{ ass:[full_map, R1_map, R2_map],
     #  prob:[...],
     #  ...}
-    maps = {"assumption" : [load("papers.csv", "acat.csv")],
-            "problem" : [load("papers.csv", "pcat.csv")],
+    maps = {"problem" : [load("papers.csv", "pcat.csv")],
+            "assumption" : [load("papers.csv", "acat.csv")],
             "error" : [load("papers.csv", "ecat.csv")]
-           }
+            }
+
+    # create separate maps based on outcome
+    outcome_maps = {"problem": [],
+                    "assumption": [],
+                    "error": []}
+    for key in maps:
+        heatmap = maps[key][0]
+        outcomes = list(split_on_outcome(heatmap))
+        outcome_maps[key].append(pd.concat(outcomes))
+        outcome_maps[key].extend(split_on_outcome(heatmap))
+        del heatmap["Overall outcome"]
+
     # add the maps where R1 and R2 are separate
     for key in maps:
         heatmap = maps[key][0]
@@ -105,9 +156,9 @@ def main(output_directory):
             # skip the first three columns with paper title etc
             heatmap = division.iloc[:,3:]
             filename = "{}_{}_{}".format(
-                                         "2D",
-                                         overall_category,
-                                         divtag)
+                "2D",
+                overall_category,
+                divtag)
             path = os.path.join(output_directory, filename)
             savefig(heatmap, path, annot=True)
 
@@ -120,11 +171,25 @@ def main(output_directory):
             # all rows are collapsed into one, so give it an appropriate label
             heatmap.index=["Collated count"]
             filename = "{}_{}_{}".format(
-                                         "1D",
-                                         overall_category,
-                                         divtag)
+                "1D",
+                overall_category,
+                divtag)
             path = os.path.join(output_directory, filename)
             savefig(heatmap , path, square=True, annot=True)
+
+        # generate bar charts
+        r1_map = pd.DataFrame(maps[overall_category][1].iloc[:,3:].sum(axis=0)).T
+        r1_map.index = ["R1"]
+        r2_map = pd.DataFrame(maps[overall_category][2].iloc[:,3:].sum(axis=0)).T
+        r2_map.index = ["R2"]
+        combined_map = pd.concat([r1_map, r2_map])
+        for division, divtag in zip([combined_map, r1_map, r2_map], ["both", "R1", "R2"]):
+            filename = "{}_{}_bar".format(
+                overall_category,
+                divtag)
+            path = os.path.join(output_directory, filename)
+            save_stacked_bar_chart(division, path, overall_category.capitalize() + " Category", "Count")
+
 
         # 1D version, R1 and R2 normalized to number of papers
         # [R1, R2]
@@ -150,6 +215,103 @@ def main(output_directory):
         filename = "{}_{}.png".format("blended", overall_category)
         output_path = os.path.join(output_directory, filename)
         blend(path1, path2, output_path)
+
+    # plot problems, assumptions, and errors per paper
+    #   bar plot
+    category_maps = []
+    for overall_category in maps:
+        frame = pd.DataFrame(maps[overall_category][0].iloc[:,3:].sum(axis=1))
+        # rename column
+        frame.columns = [overall_category.capitalize()]
+        category_maps.append(frame)
+    frames = pd.concat(category_maps, axis=1)
+    filename = "papers_bar.png"
+    output_path = os.path.join(output_directory, filename)
+    save_horizontal_bar_chart(frames, output_path, "Count", "Article", width=0.5, figsize=(6,12))
+
+    #   plot heatmap
+    filename = "papers_heatmap.png"
+    output_path = os.path.join(output_directory, filename)
+    for column in frames:
+        max_value = frames[column].max()
+        frames[column] = frames[column].divide(max_value)
+    frames = frames.round(2)
+    save_heatmap_vertical(frames, output_path, "Article", annot=False)
+
+    # plot problems, assumptions, and errors per paper, grouped by type
+    #   bar plot
+    frame = pd.DataFrame(maps["problem"][0])
+    sorted = frame.sort_values(['R1/R2', 'ID'])
+    ids = sorted['ID']
+    category_maps = [ids]
+    for overall_category in maps:
+        frame = pd.DataFrame(maps[overall_category][0])
+        sorted = frame.sort_values(['R1/R2', 'ID'])
+        frame = pd.DataFrame(sorted.iloc[:, 3:].sum(axis=1))
+        # rename column
+        frame.columns = [overall_category.capitalize()]
+        category_maps.append(frame)
+    frames = pd.concat(category_maps, axis=1)
+    del frames['ID']
+    filename = "papers_type_bar.png"
+    output_path = os.path.join(output_directory, filename)
+    save_horizontal_bar_chart(frames, output_path, "Count", "Article", width=0.5, figsize=(6, 12))
+
+    # plot problems, assumptions, and errors per paper, grouped by outcome
+    #   bar plot
+    outcomes = ["Success", "Partial success", "Failure", "No Result"]
+    frame = pd.DataFrame(outcome_maps["problem"][0])
+    nr_rows = frame.shape[0]
+    # insert dummy rows for additional spacing between categories
+    for outcome in outcomes:
+        row = [frame.shape[0] + 1, "", "", outcome] + [0]*(frame.shape[1] - 4)
+        frame.loc[-1] = row
+        frame.index += 1
+    # sort on outcome
+    frame['Overall outcome'] = pd.Categorical(frame['Overall outcome'], outcomes)
+    sorted = frame.sort_values(['Overall outcome', 'ID'])
+    ids = sorted['ID']
+    category_maps = [ids]
+    for overall_category in outcome_maps:
+        frame = pd.DataFrame(outcome_maps[overall_category][0])
+        for outcome in outcomes:
+            row = [frame.shape[0] + 1, "", "", outcome] + [0] * (frame.shape[1] - 4)
+            frame.loc[-1] = row
+            frame.index += 1
+        frame['Overall outcome'] = pd.Categorical(frame['Overall outcome'], ["Success", "Partial success", "Failure", "No Result"])
+        sorted = frame.sort_values(['Overall outcome', 'ID'])
+        frame = pd.DataFrame(sorted.iloc[:, 3:].sum(axis=1))
+        # rename column
+        frame.columns = [overall_category.capitalize()]
+        category_maps.append(frame)
+    frames = pd.concat(category_maps, axis=1)
+    data = []
+    data.insert(0, {'ID': 0, 'Problem': 0, 'Assumption': 0, 'Error': 0})
+    frames = pd.concat([pd.DataFrame(data), frames])
+    frames.set_index('ID', inplace=True)
+    columns = ['Problem','Assumption','Error']
+    frames = frames[columns]
+
+    # generate correct tick labels
+    yticks = []
+    indices = frames.index.tolist()
+    for i in range(frames.shape[0]):
+        if indices[i] == 0 or indices[i] > nr_rows:
+            yticks.append("")
+        else:
+            yticks.append(indices[i])
+    filename = "papers_outcome_bar.png"
+    output_path = os.path.join(output_directory, filename)
+    fig = frames.plot.barh(width=0.6, figsize=(6, 10))
+    fig.invert_yaxis()
+    fig.set_yticklabels(yticks)
+    fig.xaxis.tick_top()
+    fig.set_xlabel("Count")
+    # hardcoded label to fit figure size
+    fig.set_ylabel("              No Result                                          Failure                                                Partial Success                      Success")
+    fig.xaxis.set_label_position('top')
+    fig.get_figure().savefig(output_path)
+    plt.clf()
 
 if __name__ == '__main__':
     main(output_directory="output_figures")
