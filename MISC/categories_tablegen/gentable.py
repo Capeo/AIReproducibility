@@ -257,6 +257,29 @@ def main(output_directory):
     output_path = os.path.join(output_directory, filename)
     save_horizontal_bar_chart(frames, output_path, "Count", "Article", width=0.5, figsize=(6, 12))
 
+
+    # generate box plot
+    frames = []
+    for outcome_category in outcome_maps:
+        frame = pd.DataFrame(outcome_maps[outcome_category][0])
+        outcome_column = frame["Overall outcome"].apply(lambda row: row + " - " + outcome_category.capitalize())
+        frame = pd.DataFrame(frame.iloc[:, 3:].sum(axis=1))
+        frame = pd.concat([outcome_column, frame], axis=1)
+        frames.append(frame)
+    frames = pd.concat(frames)
+    frames = frames.rename(index=str, columns={0:"Count"})
+    frames['Overall outcome'] = pd.Categorical(frames['Overall outcome'], ["Success - Problem", "Success - Assumption", "Success - Error",
+                                                                         "Partial success - Problem", "Partial success - Assumption", "Partial success - Error",
+                                                                         "Failure - Problem", "Failure - Assumption", "Failure - Error",
+                                                                         "No Result - Problem", "No Result - Assumption", "No Result - Error"])
+    sorted = frames.sort_values(['Overall outcome'])
+    ax = sns.boxplot(y="Overall outcome", x="Count", data=sorted)
+    output_path = os.path.join(output_directory, "boxplot.png")
+    ax.get_figure().savefig(output_path, bbox_inches='tight')
+    # clear figure
+    plt.clf()
+
+
     # plot problems, assumptions, and errors per paper, grouped by outcome
     #   bar plot
     outcomes = ["Success", "Partial success", "Failure", "No Result"]
